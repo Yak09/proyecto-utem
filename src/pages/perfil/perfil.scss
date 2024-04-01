@@ -1,0 +1,52 @@
+.perfil-container {
+    color: #000000;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombras en todos los bordes */
+    
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    
+    .perfil-content {
+        
+        display: flex;
+        align-items: center;
+        border-radius: 10px; /* Borde redondeado para el contenido */
+        overflow: hidden; /* Para ocultar la sombra de los bordes internos */
+        
+        .perfil-image {
+            margin-right: 20px;
+            flex-shrink: 0; /* Evitar que la imagen se encoge */
+            
+            img {
+                width: 200px; /* Tamaño de la imagen */
+                height: 200px;
+                border-radius: 50%;               
+                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); /* Sombra para la imagen */
+            }
+        }
+        
+        .perfil-details {
+            flex-grow: 1; /* Permitir que los detalles del perfil ocupen todo el espacio restante */
+            
+            .perfil-item {
+                background-color: #F8F9FA;
+                margin-bottom: 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 10px;
+                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); /* Sombra para la imagen */
+                
+                span:first-child {
+                    font-weight: bold;
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+}

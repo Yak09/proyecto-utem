@@ -39,7 +39,7 @@ const Sidebar = () => {
                     )}
                 </li>
                 <li>
-                    <NavLink to="Config" className="text-secondary rounded py-2 w-100 d-inline-block px-2" > <FaIcons.FaWrench className="me-2"/> Configuración</NavLink>
+                    <NavLink to="/CreatePin" className="text-secondary rounded py-2 w-100 d-inline-block px-2" > <FaIcons.FaWrench className="me-2"/> Configuración</NavLink>
                 </li>
             </ul>
         </div>

@@ -21,7 +21,7 @@ const Generar = () => {
                 <div className='generar-details'>
                     <div className='generar-item'>
                         <span>Nombre Completo:</span>
-                        <span>Martin</span>
+                        <span>Martin Daniel Martínez Allende</span>
                     </div>
                     <div className='generar-item'>
                         <span>Fecha de solicitud:</span>

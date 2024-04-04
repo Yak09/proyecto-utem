@@ -1,6 +1,7 @@
 
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import Button from '@mui/material/Button';
 
 import './Generar.scss'
 
@@ -21,7 +22,7 @@ const Generar = () => {
                 <div className='generar-details'>
                     <div className='generar-item'>
                         <span>Nombre Completo:</span>
-                        <span>Martin</span>
+                        <span>Martin Daniel Martínez Allende</span>
                     </div>
                     <div className='generar-item'>
                         <span>Fecha de solicitud:</span>
@@ -44,6 +45,9 @@ const Generar = () => {
                             />
                     </div>
                 </div>
+            </div>
+            <div className='generar-button'>
+                <Button variant="contained">Generar</Button>
             </div>
         </div>
     )

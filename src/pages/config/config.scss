@@ -24,8 +24,24 @@
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Sombras más suaves */
 }
 
-.MuiButton-root {
-    width: 200px; /* Ajustar el ancho del botón */
-    height: 50px; /* Ajustar la altura del botón */
-    font-size: 16px; /* Incrementar el tamaño de la fuente del botón */
+.MuiFormControl-root {
+    margin-bottom: 20px; /* Añadir espacio entre los TextField */
 }
+
+.MuiButton-root {
+    width: 150px; /* Ajustar el ancho del botón */
+    height: 40px; /* Ajustar la altura del botón */
+    font-size: 14px; /* Incrementar el tamaño de la fuente del botón */
+    margin: 10px; /* Agregar margen entre los botones */
+}
+
+.MuiButton-containedPrimary {
+    background-color: #ff5252; /* Cambiar el color de fondo del botón primario */
+    color: white; /* Cambiar el color del texto del botón primario */
+}
+
+.MuiButton-containedSecondary {
+    background-color: #3f51b5; /* Cambiar el color de fondo del botón secundario */
+    color: white; /* Cambiar el color del texto del botón secundario */
+}
+

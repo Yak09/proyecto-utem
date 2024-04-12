@@ -15,20 +15,15 @@ function App() {
   return (
     <>
     <Router>
-      <div className='flex'>
-        <Sidebar/> 
-        {/* <Banner/> */}
-        <div className='content'>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/Home" element={<Home />} />
             <Route path="/Perfil" element={<Perfil />} />
             <Route path="/Generar" element={<Generar />} />
             <Route path="/Escanear" element={<Escanear />} />
             <Route path="/CreatePin" element={<CreatePin />} />
             <Route path="/Config" element={<Config />}/>
           </Routes>
-        </div>
-      </div>
     </Router>
     </>
   )

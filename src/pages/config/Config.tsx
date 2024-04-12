@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import './config.scss';
 
+import MiniDrawer from '../../components/drawer.tsx'
+
 const Config = () => {
     const [pin, setPin] = useState('');
     const [confirmPin, setConfirmPin] = useState('');
@@ -20,6 +22,7 @@ const Config = () => {
     return (
         <>
             <div className="config-container">
+            <MiniDrawer />
                 <h2>Registro</h2>
                 <p>Crea un PIN para usarlo en el <br />
                 registro de tu asistencia</p>

@@ -1,5 +1,7 @@
 import Html5QrcodePlugin from '../../components/scanner';
 
+import MiniDrawer from '../../components/drawer.tsx'
+
 const Escanear = (props) => {
 
     const onNewScanResult = (decodedText, decodedResult) => {
@@ -8,7 +10,8 @@ const Escanear = (props) => {
     };
 
     return(
-        <div className="App">
+        <div className="App" >
+            <MiniDrawer />
             <Html5QrcodePlugin
                 fps={10}
                 qrbox={250}

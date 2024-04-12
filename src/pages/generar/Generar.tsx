@@ -5,6 +5,8 @@ import Button from '@mui/material/Button';
 
 import './Generar.scss'
 
+import MiniDrawer from '../../components/drawer.tsx'
+
   const top100Films = [
     { label: 'The Shawshank Redemption', year: 1994 },
     { label: 'The Godfather', year: 1972 },
@@ -17,6 +19,7 @@ import './Generar.scss'
 const Generar = () => {
     return(
         <div className='generar-container'>
+            <MiniDrawer />
             <h2> Generar QR</h2>
             <div className='generar-content'>
                 <div className='generar-details'>

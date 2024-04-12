@@ -7,6 +7,7 @@ import App from './App.tsx'
 import NavbarUtem from './appbar.tsx'
 
 
+
 import './index.css'
 
 
@@ -25,7 +26,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <App />
-      <NavbarUtem alumnoName="Cristian Montecinos Fuenzalida" />
     </ThemeProvider>
   </React.StrictMode>,
 );

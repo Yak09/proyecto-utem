@@ -1,7 +1,11 @@
 import './perfil.scss'
+
+import MiniDrawer from '../../components/drawer.tsx'
+
 const Perfil = ({alumnoName = 'John Doe',correo = 'john.doe@example.com', carrera = 'Ingeniería Informática', telefono = '569-4562-7890'}) => {
     return (
         <div className="perfil-container">
+            <MiniDrawer />
             <h2>Perfil del Estudiante</h2>
             <div className="perfil-content">
                 <div className="perfil-image">

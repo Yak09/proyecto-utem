@@ -3,10 +3,13 @@ import Button from '@mui/material/Button';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import './config.scss';
 
+import MiniDrawer from '../../components/drawer.tsx'
+
 const CreatePin = () => {
     return (
         <>
             <div className="config-container">
+            <MiniDrawer />
                 <div className='titlePin'>
                     <h2>Parece que aún no tienes tu pin <br/> de registro de asistencia</h2>
                 </div>

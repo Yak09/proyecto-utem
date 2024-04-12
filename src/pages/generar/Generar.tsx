@@ -8,13 +8,15 @@ import './Generar.scss'
 import MiniDrawer from '../../components/drawer.tsx'
 
   const top100Films = [
-    { label: 'The Shawshank Redemption', year: 1994 },
-    { label: 'The Godfather', year: 1972 },
-    { label: 'The Godfather: Part II', year: 1974 },
-    { label: 'The Dark Knight', year: 2008 },
-    { label: '12 Angry Men', year: 1957 },
-    { label: "Schindler's List", year: 1993 },
-    { label: 'Pulp Fiction', year: 1994 },]
+      { label: '08:00 - 09:30', periodo: 1 },
+      { label: '09:40 - 11:10', periodo: 2 },
+      { label: '11:20 - 12:50', periodo: 3 },
+      { label: '13:00 - 14:30', periodo: 4 },
+      { label: '14:40 - 16:10', periodo: 5 },
+      { label: '16:20 - 17:50', periodo: 6 },
+      { label: '18:00 - 19:30', periodo: 7 },
+      { label: '19:40 - 21:10', periodo: 8 },
+      { label: '21:20 - 22:50', periodo: 9 },]
 
 const Generar = () => {
     return(

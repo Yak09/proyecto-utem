@@ -4,7 +4,7 @@ import './App.css'
 import './App.scss'
 import Home from './pages/home/Home';
 import Perfil from './pages/perfil/Perfil'
-import Sidebar from './components/Sidebar';
+// import Sidebar from './components/Sidebar';
 import Generar from './pages/generar/Generar';
 import Escanear from './pages//escanear/Escanear';
 import CreatePin from './pages/config/CreatePin';
@@ -22,7 +22,7 @@ function App() {
             <Route path="/Generar" element={<Generar />} />
             <Route path="/Escanear" element={<Escanear />} />
             <Route path="/CreatePin" element={<CreatePin />} />
-            <Route path="/Config" element={<Config />}/>
+            <Route path="/Config" element={<Config />}/>  
           </Routes>
     </Router>
     </>

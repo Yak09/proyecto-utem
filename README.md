@@ -11,3 +11,4 @@
 ### npm install bootstrap@5.3.3
 
 ### npm i html5-qrcode
+### npm install qrcode.react

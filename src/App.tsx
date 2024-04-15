@@ -9,6 +9,7 @@ import Generar from './pages/generar/Generar';
 import Escanear from './pages//escanear/Escanear';
 import CreatePin from './pages/config/CreatePin';
 import Config from './pages/config/Config';
+import DataGrid from './pages/home/dataGrid';
 // import { Banner } from './components/Banner';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/Home" element={<Home />} />
+            <Route path="/DataGrid" element={<DataGrid />} />
             <Route path="/Perfil" element={<Perfil />} />
             <Route path="/Generar" element={<Generar />} />
             <Route path="/Escanear" element={<Escanear />} />

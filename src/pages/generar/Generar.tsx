@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -36,9 +36,14 @@ const Generar = () => {
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
   const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(null);
   const [qrData, setQRData] = useState('');
+  const [error, setError] = useState('');
 
   const handleGenerarClick = () => {
-    // Aquí puedes generar el QR con la información ingresada
+    if (!nombre || !horarioSeleccionado || !asignaturaSeleccionada) {
+      setError('No se pueden dejar campos vacíos para generar el código QR.');
+      return;
+    }
+
     const qrDataString = JSON.stringify({
       nombre: nombre,
       fecha: fecha,
@@ -46,12 +51,13 @@ const Generar = () => {
       asignatura: asignaturaSeleccionada ? asignaturaSeleccionada.label : '',
     });
     setQRData(qrDataString);
+    setError('');
   };
 
   return (
     <div className="generar-container">
       <MiniDrawer />
-      <h2> Generar QR</h2>
+      <h2>Generar QR</h2>
       <div className="generar-content">
         <div className="generar-details">
           <div className="generar-item">
@@ -92,6 +98,7 @@ const Generar = () => {
           </div>
         </div>
       </div>
+      {error && <div className="error-message">{error}</div>}
       <div className="generar-button">
         <Button variant="contained" onClick={handleGenerarClick}>
           Generar

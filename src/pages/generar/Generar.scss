@@ -36,3 +36,17 @@
         }
     }
 }
+
+.error-message-container {
+    margin-top: 10px;
+  }
+  
+  .error-message {
+    border: 1px solid #ff0000;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    background-color: #ffecec;
+    color: #ff0000;
+  }
+  

@@ -98,8 +98,12 @@ const Generar = () => {
           </div>
         </div>
       </div>
-      {error && <div className="error-message">{error}</div>}
-      <div className="generar-button">
+      {error && (
+        <div className="error-message-container">
+          <div className="error-message">{error}</div>
+        </div>
+      )}
+      <div className="generar-button" style={{ marginTop: '20px' }}>
         <Button variant="contained" onClick={handleGenerarClick}>
           Generar
         </Button>

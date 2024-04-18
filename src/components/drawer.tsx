@@ -21,6 +21,7 @@ import Person2Icon from '@mui/icons-material/Person2';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import BuildIcon from '@mui/icons-material/Build';
 
+import Example from './Carousel.tsx'
 
 import {useNavigate} from "react-router-dom";
 
@@ -128,6 +129,8 @@ export default function MiniDrawer() {
           <img src="src\assets\logo_black_utem.png" alt="logo" style={{ width: 250, marginRight: 64 }} />
         </Toolbar>
       </AppBar>
+      
+      
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
@@ -240,5 +243,6 @@ export default function MiniDrawer() {
         <Divider />
       </Drawer>
     </Box>
+    
   );
 }

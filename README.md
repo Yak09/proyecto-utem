@@ -12,3 +12,4 @@
 
 ### npm i html5-qrcode
 ### npm install qrcode.react
+### npm i react-material-ui-carousel

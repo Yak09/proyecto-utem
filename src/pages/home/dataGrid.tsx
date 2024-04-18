@@ -1,69 +1,105 @@
-import MiniDrawer from "../../components/drawer"
-
+import React, { useState } from 'react';
+import MiniDrawer from "../../components/drawer";
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 const columns: GridColDef<(typeof rows)[number]>[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
+    { field: 'id', headerName: 'ID', width: 90, editable: false },
     {
       field: 'firstName',
-      headerName: 'First name',
+      headerName: 'Nombre',
       width: 150,
-      editable: true,
+      editable: false,
     },
     {
       field: 'lastName',
-      headerName: 'Last name',
+      headerName: 'Apellido',
       width: 150,
-      editable: true,
+      editable: false,
+    },
+    {
+      field: 'rut',
+      headerName: 'Rut',
+      width: 150,
+      editable: false,
     },
     {
       field: 'age',
-      headerName: 'Age',
+      headerName: 'Edad',
       type: 'number',
       width: 110,
-      editable: true,
+      editable: false,
     },
     {
       field: 'fullName',
-      headerName: 'Full name',
+      headerName: 'Nombre completo',
       description: 'This column has a value getter and is not sortable.',
       sortable: false,
       width: 160,
       valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
+      editable: false,
+    },
+    // Nueva columna para presentes o ausentes
+    {
+      field: 'presente',
+      headerName: 'Presente',
+      type: 'boolean',
+      width: 110,
+      editable: false,
     },
   ];
   
-  const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+const rows = [
+    { id: 1, lastName: 'Snow', firstName: 'Jon', rut: '123456789', age: 14, presente: true },
+    { id: 2, lastName: 'Lannister', firstName: 'Cersei', rut: '987654321', age: 31, presente: false },
+    { id: 3, lastName: 'Lannister', firstName: 'Jaime', rut: '456789123', age: 31, presente: true },
+    { id: 4, lastName: 'Stark', firstName: 'Arya', rut: '789123456', age: 11, presente: true },
+    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', rut: '321654987', age: null, presente: false },
+    { id: 6, lastName: 'Melisandre', firstName: null, rut: '654987321', age: 150, presente: true },
+    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', rut: '987321654', age: 44, presente: false },
+    { id: 8, lastName: 'Frances', firstName: 'Rossini', rut: '321987654', age: 36, presente: true },
+    { id: 9, lastName: 'Roxie', firstName: 'Harvey', rut: '654321987', age: 65, presente: true },
+];
 
-  ];
-export default function dataGrid() {
-  return  (
-    <Box sx={{ height: 400, width: '100%' }}>
-    <MiniDrawer />
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
-      />
-    </Box>
-  );
+export default function DataGridWithSearch() {
+    const [filterText, setFilterText] = useState('');
+    const [filteredRows, setFilteredRows] = useState(rows);
+
+    const handleFilterChange = (event) => {
+      const text = event.target.value.toLowerCase();
+      const filteredData = rows.filter(row => {
+          return Object.values(row).some(value =>
+              typeof value === 'string' && value.toLowerCase().includes(text)
+          ) || `${row.firstName} ${row.lastName}`.toLowerCase().includes(text); // Busca en el nombre completo
+      });
+      setFilterText(text);
+      setFilteredRows(filteredData);
+  };
+
+    const currentDate = new Date().toLocaleDateString();
+
+    return (
+        <Box sx={{ height: 400, width: '100%' }}>
+            <MiniDrawer />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <input
+                    type="text"
+                    placeholder="Buscador"
+                    value={filterText}
+                    onChange={handleFilterChange}
+                    style={{ padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+                />
+                <div style={{ padding: '8px', borderRadius: '5px', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', backgroundColor: '#fff' }}>
+                    {currentDate}
+                </div>
+            </div>
+            <DataGrid
+                rows={filteredRows}
+                columns={columns}
+                pageSize={5}
+                checkboxSelection
+                disableRowSelectionOnClick
+            />
+        </Box>
+    );
 }

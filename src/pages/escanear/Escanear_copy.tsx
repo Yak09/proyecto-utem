@@ -47,12 +47,12 @@ const Escanear = () => {
         {startScan && (
             <Box sx={{ margin: "auto", textAlign: "center"}}>
                 <QrCodeReader 
-                delay={100} 
+                delay={200} 
                 width={500} 
                 facingMode={"environment"}
                 height={500} 
                 onRead={handleRead} />
-                        <p>{val}</p>
+                <p>{val}</p>
             </Box>
         )}
       </Container>

@@ -9,7 +9,7 @@ import MiniDrawer from '../../components/drawer.tsx'
 const CreatePin = () => {
     return (
         <>  
-            <Example />
+            <Example style={{ height: '320px' }}/>
             <div className="config-container">
             <MiniDrawer />
             

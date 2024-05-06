@@ -51,7 +51,7 @@ const Config = () => {
     <Stack spacing={2} direction="row" justifyContent="center" style={{ marginTop: '20px' }}> {/* Agregar margen superior a este Stack */}
         <Button variant="contained" color="secondary" onClick={handleAccept} style={{ width: '150px' }}>Aceptar</Button>
         <Link to="../Createpin" style={{ textDecoration: 'none' }}> {/* Quité el botón del Link */}
-            <Button variant="contained" color="secondary" style={{ width: '150px' }}>Cancelar</Button>
+            <Button variant="contained" color="secondary" style={{ width: '120px' }}>Cancelar</Button>
         </Link>
     </Stack>
 </Box>

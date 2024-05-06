@@ -6,7 +6,7 @@ import Home from './pages/home/Home';
 import Perfil from './pages/perfil/Perfil'
 // import Sidebar from './components/Sidebar';
 import Generar from './pages/generar/Generar';
-import Escanear from './pages//escanear/Escanear';
+//import Escanear from './pages//escanear/Escanear';
 import Escanear_copy from './pages//escanear/Escanear_copy';
 import CreatePin from './pages/config/CreatePin';
 import Config from './pages/config/Config';

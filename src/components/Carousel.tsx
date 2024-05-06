@@ -16,11 +16,13 @@ function Example(props)
     ]
 
     return (
+    <div style={{ height: '300px' }}> {/* Establece la altura directamente en línea */}
         <Carousel>
             {
                 items.map( (item, i) => <Item key={i} item={item} /> )
             }
         </Carousel>
+    </div>
     )
 }
 

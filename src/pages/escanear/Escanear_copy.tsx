@@ -16,38 +16,50 @@ import QrCodeIcon from '@mui/icons-material/QrCode';
 import Button from '@mui/material/Button';
 
 import axios from "axios";
+import { useGeolocated } from "react-geolocated";
+
 
 const Escanear = () => {
 
     const [startScan, setStartScan] = useState(false);
+    const [getLocation, setGetLocation] = useState(false);
     const [val, setVal] = useState<string>('');
     const [data, setData] = useState(null)
     const navigate = useNavigate(); // Hook para navegación
+
+    const { coords, isGeolocationAvailable, isGeolocationEnabled, timestamp } = useGeolocated({
+        positionOptions: {
+            enableHighAccuracy: true,
+        },
+        userDecisionTimeout: 5000,
+        watchPosition: getLocation, // Solo obtener la geolocalización si getLocation es true
+    });
 
     const handleRead = (code: QRCode) => {
         setVal(code.data);
         const baseURL_post = "http://127.0.0.1:8000/asistencia";
         try {
-            axios.post(baseURL,code.data)
-            .then((response) => {
-                console.log(response.data)
-              });  
+            //axios.post(baseURL,code.data)
+            //.then((response) => {
+            //    console.log(response.data)
+            //  });  
         } catch (err) {
             console.log(err.message)
         }
         console.log(code.data); // Imprime el valor escaneado por consola
-        navigate('/DataGrid', { state: { qrData: code.data } }); // Redirige a la ruta '/DataGrid' con los datos del QR
+        //navigate('/DataGrid', { state: { qrData: code.data } }); // Redirige a la ruta '/DataGrid' con los datos del QR
     };
     const baseURL = "http://127.0.0.1:8000/alumnos";
 
     const handleClick = async () => {
         try {
-            axios.get(baseURL).then((response) => {
-                setData(response.data);
-                console.log(response.data)
-              });  
+            setGetLocation(true); // Solo se actualiza el estado aquí
+            if (coords) {
+                console.log(coords);
+                console.log(timestamp);
+            }
         } catch (err) {
-            console.log(err.message)
+            console.log(err.message);
         }
     }
 
@@ -88,6 +100,7 @@ const Escanear = () => {
                                 startIcon={<QrCodeIcon />} // Coloca el icono al inicio del botón
                                 onClick={() => {
                                     handleClick();
+                                    
                                     }}
                             >
                             Consumir API

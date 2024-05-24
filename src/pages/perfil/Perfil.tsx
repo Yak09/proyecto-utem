@@ -1,8 +1,12 @@
 import './perfil.scss'
 
 import MiniDrawer from '../../components/drawer.tsx'
+import { useContext } from 'react';
+import { AlumnoContext } from '../../hooks/alumnoContext.tsx';
+import { Alumno } from '../../interfaces/interfaces';
 
-const Perfil = ({alumnoName = 'John Doe',correo = 'john.doe@example.com', carrera = 'Ingeniería Informática', telefono = '569-4562-7890'}) => {
+const Perfil = () => {
+    const alumnoDatos = useContext(AlumnoContext);
     return (
         <div className="perfil-container">
             <MiniDrawer />
@@ -14,19 +18,19 @@ const Perfil = ({alumnoName = 'John Doe',correo = 'john.doe@example.com', carrer
                 <div className="perfil-details">
                     <div className="perfil-item">
                         <span>Nombre Completo:</span>
-                        <span>{alumnoName}</span>
+                        <span>{alumnoDatos?.nombre}</span>
                     </div>
                     <div className="perfil-item">
                         <span>Correo Electrónico:</span>
-                        <span>{correo}</span>
+                        <span>{alumnoDatos?.correo}</span>
                     </div>
                     <div className="perfil-item">
                         <span>Carrera:</span>
-                        <span>{carrera}</span>
+                        <span>{alumnoDatos?.carrera}</span>
                     </div>
                     <div className="perfil-item">
                         <span>Número de Teléfono:</span>
-                        <span>{telefono}</span>
+                        <span>{alumnoDatos?.telefono}</span>
                     </div>
                 </div>
             </div>

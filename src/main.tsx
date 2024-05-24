@@ -24,7 +24,7 @@ const alumno: Alumno = {
   _id: '123456',
   carrera: 'Ingeniería en Sistemas',
   correo: 'alumno@ejemplo.com',
-  nombre: 'Juan Pérez',
+  nombre: 'Andres Perez Gonzalez',
   telefono: '123-456-7890'
 };
 

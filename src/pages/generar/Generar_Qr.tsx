@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import QRCode from 'qrcode.react';
 
+
 import MiniDrawer from '../../components/drawer.tsx'
 
 const Generar_Qr = () => {

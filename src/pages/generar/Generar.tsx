@@ -5,6 +5,8 @@ import Button from '@mui/material/Button';
 import './Generar.scss';
 import MiniDrawer from '../../components/drawer.tsx';
 import QRCode from 'qrcode.react';
+import { useContext } from 'react';
+import { AlumnoContext } from '../../hooks/alumnoContext.tsx';
 
 const horarioAlumno = [
   { label: '08:00 - 09:30', periodo: 1 },
@@ -31,21 +33,21 @@ const asignaturaAlumno = [
 ];
 
 const Generar = () => {
-  const [nombre, setNombre] = useState('');
   const [fecha, setFecha] = useState(new Date().toLocaleDateString());
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
   const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(null);
   const [qrData, setQRData] = useState('');
   const [error, setError] = useState('');
+  const alumnoDatos = useContext(AlumnoContext);
 
   const handleGenerarClick = () => {
-    if (!nombre || !horarioSeleccionado || !asignaturaSeleccionada) {
+    if (!alumnoDatos?.nombre || !horarioSeleccionado || !asignaturaSeleccionada) {
       setError('No se pueden dejar campos vacíos para generar el código QR.');
       return;
     }
 
     const qrDataString = JSON.stringify({
-      nombre: nombre,
+      nombre: alumnoDatos?.nombre,
       fecha: fecha,
       horario: horarioSeleccionado ? horarioSeleccionado.label : '',
       asignatura: asignaturaSeleccionada ? asignaturaSeleccionada.label : '',
@@ -62,11 +64,7 @@ const Generar = () => {
         <div className="generar-details">
           <div className="generar-item">
             <span>Nombre Completo:</span>
-            <TextField
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              label="Nombre"
-            />
+            <span>{alumnoDatos?.nombre}</span>
           </div>
           <div className="generar-item">
             <span>Fecha de solicitud:</span>

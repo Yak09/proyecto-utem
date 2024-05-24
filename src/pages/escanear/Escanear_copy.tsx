@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MiniDrawer from '../../components/drawer.tsx';
 import QrCodeReader, { QRCode } from 'react-qrcode-reader';
@@ -10,7 +10,11 @@ import axios from "axios";
 import { useGeolocated } from "react-geolocated";
 import Swal from 'sweetalert2'; // Importa SweetAlert2
 
+import { AlumnoContext } from '../../hooks/alumnoContext.tsx';
+import {Asistencia, Asistencia_info} from '../../interfaces/interfaces.tsx'
+
 const Escanear = () => {
+    const alumno_data = useContext(AlumnoContext);
     const [startScan, setStartScan] = useState(false);
     const [getLocation, setGetLocation] = useState(false);
     const [val, setVal] = useState<string>('');
@@ -40,11 +44,24 @@ const Escanear = () => {
 
     const handleRead = async (code: QRCode) => {
         setVal(code.data);
+        setStartScan(false);
+        setGetLocation(true);
 
         try {
             const qrData = JSON.parse(code.data);
-            const nombreQR = qrData.nombre;
 
+            const asistencia: Asistencia = {
+                alumno_id: alumno_data._id,
+                curso_id: qrData.curso_id,
+                fecha: timestamp, // Asignar la fecha actual en formato ISO
+                lat: coords?.latitude, // Ejemplo de latitud
+                lng: coords?.longitude, // Ejemplo de longitud
+                asistencia: true
+              };
+            const response_asistencia = await axios.post('http://127.0.0.1:8000/asistencia',asistencia);
+
+            const nombreQR = response_asistencia.data.nombre_alumno;
+            
             const alumnoEncontrado = alumnos.find((alumno: { nombre: string }) => alumno.nombre === nombreQR);
 
             if (alumnoEncontrado) {
@@ -53,7 +70,7 @@ const Escanear = () => {
                     title: 'Registro exitoso',
                     text: 'El alumno ha sido registrado exitosamente.',
                 });
-                navigate('/DataGrid', { state: { qrData: code.data } }); // Redirige a la ruta '/DataGrid' con los datos del QR
+                navigate('/DataGrid', { state: { qrData_: response_asistencia.data } }); // Redirige a la ruta '/DataGrid' con los datos del QR
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -77,6 +94,7 @@ const Escanear = () => {
             if (coords) {
                 console.log(coords);
                 console.log(timestamp);
+                console.log(alumno_data);
             }
 
             // Llamada a la API para obtener el listado de alumnos
@@ -142,12 +160,11 @@ const Escanear = () => {
             {startScan && (
                 <Box sx={{ margin: "auto", textAlign: "center" }}>
                     <QrCodeReader
-                        delay={200}
+                        delay={500}
                         width={500}
                         facingMode={"environment"}
                         height={500}
                         onRead={handleRead} />
-                    <p>{val}</p>
                 </Box>
             )}
         </Container>

@@ -9,7 +9,7 @@ import CreatePin from './pages/config/CreatePin';
 import Config from './pages/config/Config';
 import DataGrid from './pages/home/dataGrid';
 import SubjectSelection from './components/SubjectSelection';
-import  Alumno  from './interfaces/interfaces';
+import  {Alumno}  from './interfaces/interfaces';
 import { AlumnoContext } from './hooks/alumnoContext';
 import { useEffect, useState } from 'react';
 import axios from 'axios';

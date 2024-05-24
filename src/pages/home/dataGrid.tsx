@@ -46,7 +46,7 @@ export default function DataGridWithSearch() {
   const [rows, setRows] = useState([]);
   const [filteredRows, setFilteredRows] = useState([]);
   const location = useLocation();
-  const qrData = location.state ? location.state.qrData : '';
+  const qrData = location.state ? location.state.qrData_ : '';
 
   const [asignatura, setAsignatura] = useState('');
   const [horario, setHorario] = useState('');
@@ -76,10 +76,10 @@ export default function DataGridWithSearch() {
   useEffect(() => {
     if (qrData) {
       try {
-        const qrJson = JSON.parse(qrData);
-        const nombreAlumno = qrJson.nombre;
-        const nombreAsignatura = qrJson.asignatura;
-        const horarioAsignatura = qrJson.horario;
+        //const qrJson = JSON.parse(qrData);
+        const nombreAlumno = qrData.nombre_alumno;
+        const nombreAsignatura = qrData.nombre_asignatura;
+        const horarioAsignatura = qrData.periodo;
 
         setAsignatura(nombreAsignatura);
         setHorario(horarioAsignatura);

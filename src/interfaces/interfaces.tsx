@@ -1,11 +1,10 @@
-import React from 'react'
 
-export interface Alumno{
-    _id: string;
-    carrera: string;
-    correo: string;
-    nombre: string;
-    telefono: string;
-  }
+export default interface Alumno {
+    carrera: string,
+    correo: string,
+    nombre: string,
+    telefono: string, 
+    _id: string,
+}
 
 

@@ -2,19 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MiniDrawer from '../../components/drawer.tsx';
 import QrCodeReader, { QRCode } from 'react-qrcode-reader';
-import { Scanner } from '@yudiel/react-qr-scanner';
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import Button from '@mui/material/Button';
 import axios from "axios";
 import { useGeolocated } from "react-geolocated";
+import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 const Escanear = () => {
     const [startScan, setStartScan] = useState(false);
     const [getLocation, setGetLocation] = useState(false);
     const [val, setVal] = useState<string>('');
-    const [data, setData] = useState(null);
+    const [alumnos, setAlumnos] = useState([]);
     const navigate = useNavigate(); // Hook para navegación
 
     const { coords, isGeolocationAvailable, isGeolocationEnabled, timestamp } = useGeolocated({
@@ -25,22 +25,51 @@ const Escanear = () => {
         watchPosition: getLocation, // Solo obtener la geolocalización si getLocation es true
     });
 
-    const handleRead = (code: QRCode) => {
-        setVal(code.data);
-        const baseURL_post = "http://127.0.0.1:8000/asistencia";
-        try {
-            // axios.post(baseURL_post, code.data)
-            // .then((response) => {
-            //    console.log(response.data)
-            // });  
-        } catch (err) {
-            console.log(err.message);
-        }
-        console.log(code.data); // Imprime el valor escaneado por consola
-        // navigate('/DataGrid', { state: { qrData: code.data } }); // Redirige a la ruta '/DataGrid' con los datos del QR
-    };
+    useEffect(() => {
+        const fetchAlumnos = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/alumnos');
+                setAlumnos(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
-    const baseURL = "http://127.0.0.1:8000/alumnos";
+        fetchAlumnos();
+    }, []);
+
+    const handleRead = async (code: QRCode) => {
+        setVal(code.data);
+
+        try {
+            const qrData = JSON.parse(code.data);
+            const nombreQR = qrData.nombre;
+
+            const alumnoEncontrado = alumnos.find((alumno: { nombre: string }) => alumno.nombre === nombreQR);
+
+            if (alumnoEncontrado) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro exitoso',
+                    text: 'El alumno ha sido registrado exitosamente.',
+                });
+                navigate('/DataGrid', { state: { qrData: code.data } }); // Redirige a la ruta '/DataGrid' con los datos del QR
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Alumno no encontrado',
+                    text: 'El alumno no está registrado en el sistema.',
+                });
+            }
+        } catch (err) {
+            console.error('Error parsing QR data:', err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema al procesar el código QR.',
+            });
+        }
+    };
 
     const handleClick = async () => {
         try {
@@ -51,12 +80,24 @@ const Escanear = () => {
             }
 
             // Llamada a la API para obtener el listado de alumnos
-            const response = await axios.get(baseURL);
+            const response = await axios.get('http://127.0.0.1:8000/alumnos');
             const nombres = response.data.map((alumno: { nombre: string }) => alumno.nombre);
             console.log(nombres); // Muestra solo los nombres de los alumnos en la consola
-            setData(nombres); // Guarda los nombres obtenidos en el estado, si es necesario
+            setAlumnos(response.data); // Guarda los nombres obtenidos en el estado, si es necesario
+
+            Swal.fire({
+                icon: 'success',
+                title: 'API Consumida',
+                text: 'Los datos de los alumnos se han obtenido correctamente.',
+            });
+
         } catch (err) {
-            console.log(err.message);
+            console.error('Error fetching data:', err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema al consumir la API.',
+            });
         }
     };
 
@@ -92,9 +133,7 @@ const Escanear = () => {
                             margin: '15px',
                         }}
                         startIcon={<QrCodeIcon />} // Coloca el icono al inicio del botón
-                        onClick={() => {
-                            handleClick();
-                        }}
+                        onClick={handleClick}
                     >
                         Consumir API
                     </Button>

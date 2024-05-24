@@ -3,8 +3,8 @@ import MiniDrawer from "../../components/drawer";
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useLocation } from 'react-router-dom';
-import Container from "@mui/material/Container";
 import axios from 'axios';
+import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 90, editable: false },
@@ -48,6 +48,9 @@ export default function DataGridWithSearch() {
   const location = useLocation();
   const qrData = location.state ? location.state.qrData : '';
 
+  const [asignatura, setAsignatura] = useState('');
+  const [horario, setHorario] = useState('');
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -72,13 +75,42 @@ export default function DataGridWithSearch() {
 
   useEffect(() => {
     if (qrData) {
-      const updatedRows = rows.map(row => {
-        if (row.nombre === qrData) {
-          return { ...row, presente: true };
+      try {
+        const qrJson = JSON.parse(qrData);
+        const nombreAlumno = qrJson.nombre;
+        const nombreAsignatura = qrJson.asignatura;
+        const horarioAsignatura = qrJson.horario;
+
+        setAsignatura(nombreAsignatura);
+        setHorario(horarioAsignatura);
+
+        let found = false;
+        const updatedRows = rows.map(row => {
+          if (row.nombre === nombreAlumno) {
+            found = true;
+            return { ...row, presente: true };
+          }
+          return row;
+        });
+
+        if (found) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Registro exitoso',
+            text: `Alumno ${nombreAlumno} marcado como presente para ${nombreAsignatura} (${horarioAsignatura})`,
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Alumno no encontrado',
+            text: `El alumno ${nombreAlumno} no está registrado.`,
+          });
         }
-        return row;
-      });
-      setFilteredRows(updatedRows);
+
+        setFilteredRows(updatedRows);
+      } catch (error) {
+        console.error('Error parsing QR data:', error);
+      }
     }
   }, [qrData, rows]);
 
@@ -98,7 +130,8 @@ export default function DataGridWithSearch() {
   return (
     <Box sx={{ height: 700, width: '100%' }}>
       <Box sx={{ margin: "auto", textAlign: "center" }}>
-        <h1>{qrData}</h1>
+        <h3>{asignatura}</h3>
+        <h3>{horario}</h3>
       </Box>
       <MiniDrawer />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>

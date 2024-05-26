@@ -7,6 +7,7 @@ import MiniDrawer from '../../components/drawer.tsx';
 import QRCode from 'qrcode.react';
 import { useContext } from 'react';
 import { AlumnoContext } from '../../hooks/alumnoContext.tsx';
+import { useAuth0 } from "@auth0/auth0-react";
 
 const horarioAlumno = [
   { label: '08:00 - 09:30', periodo: 1 },
@@ -33,21 +34,27 @@ const asignaturaAlumno = [
 ];
 
 const Generar = () => {
+
   const [fecha, setFecha] = useState(new Date().toLocaleDateString());
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
   const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(null);
   const [qrData, setQRData] = useState('');
   const [error, setError] = useState('');
   const alumnoDatos = useContext(AlumnoContext);
+  const { user, isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) {
+    return <div>Loading ...</div>;
+  }
 
   const handleGenerarClick = () => {
-    if (!alumnoDatos?.nombre || !horarioSeleccionado || !asignaturaSeleccionada) {
+    if (!user.name|| !horarioSeleccionado || !asignaturaSeleccionada) {
       setError('No se pueden dejar campos vacíos para generar el código QR.');
       return;
     }
 
     const qrDataString = JSON.stringify({
-      nombre: alumnoDatos?.nombre,
+      nombre: user.name,
       fecha: fecha,
       horario: horarioSeleccionado ? horarioSeleccionado.label : '',
       asignatura: asignaturaSeleccionada ? asignaturaSeleccionada.label : '',
@@ -64,7 +71,7 @@ const Generar = () => {
         <div className="generar-details">
           <div className="generar-item">
             <span>Nombre Completo:</span>
-            <span>{alumnoDatos?.nombre}</span>
+            <span>{user.name}</span>
           </div>
           <div className="generar-item">
             <span>Fecha de solicitud:</span>
@@ -107,7 +114,7 @@ const Generar = () => {
         </Button>
       </div>
       <div className="generar-qrcode" style={{ marginTop: '20px' }}>
-        {qrData && <QRCode value={qrData} />}
+        {qrData && <QRCode value={qrData} size={256}/>}
       </div>
     </div>
   );

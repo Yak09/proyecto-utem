@@ -20,6 +20,10 @@ import HomeIcon from '@mui/icons-material/Home';
 import Person2Icon from '@mui/icons-material/Person2';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import BuildIcon from '@mui/icons-material/Build';
+import LoginButton from './loginButton.tsx';
+import LogoutButton from './logout.tsx';
+import Profile from './profile.tsx';
+import { useAuth0 } from '@auth0/auth0-react';
 
 import Example from './Carousel.tsx'
 
@@ -109,6 +113,9 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
+  const {isAuthenticated} =useAuth0()
+  
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -127,7 +134,12 @@ export default function MiniDrawer() {
             <MenuIcon />
           </IconButton>
           <img src="src\assets\logo_black_utem.png" alt="logo" style={{ width: 250, marginRight: 64 }} />
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '16px', paddingRight: '30px' }}>
+            <Profile />
+            { isAuthenticated ? <LogoutButton />:<LoginButton /> }
+          </div>
         </Toolbar>
+
       </AppBar>
       
       

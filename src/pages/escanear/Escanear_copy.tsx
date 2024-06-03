@@ -26,7 +26,8 @@ const Escanear = () => {
             enableHighAccuracy: true,
         },
         userDecisionTimeout: 5000,
-        watchPosition: getLocation, // Solo obtener la geolocalización si getLocation es true
+        watchPosition: getLocation,
+        watchLocationPermissionChange: true // Solo obtener la geolocalización si getLocation es true
     });
 
     useEffect(() => {

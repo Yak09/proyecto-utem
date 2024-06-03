@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import {Alumno} from '../interfaces/interfaces.tsx'
+import {Profesor} from '../interfaces/interfaces.tsx'
 
 
-export const AlumnoContext = createContext<Alumno | null>(null);
+export const profesorContext = createContext<Profesor | null>(null);
 
 /*{export function useAlumnoContext(){
     const alumno_context = useContext(AlumnoContext);

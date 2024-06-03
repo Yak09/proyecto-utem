@@ -6,6 +6,11 @@ export interface Alumno {
     telefono: string, 
     _id: string,
 }
+export interface Profesor {
+    correo: string,
+    nombre: string, 
+    _id: string,
+}
 
 export interface Asistencia{
     alumno_id: string,

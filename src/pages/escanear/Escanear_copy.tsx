@@ -11,9 +11,11 @@ import { useGeolocated } from "react-geolocated";
 import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 import { AlumnoContext } from '../../hooks/alumnoContext.tsx';
-import {Asistencia, Asistencia_info} from '../../interfaces/interfaces.tsx'
+import {Asistencia} from '../../interfaces/interfaces.tsx'
 
 const Escanear = () => {
+    const [fecha, setFecha] = useState(new Date().toISOString());
+    const URL = import.meta.env.VITE_API_URL;
     const alumno_data = useContext(AlumnoContext);
     const [startScan, setStartScan] = useState(false);
     const [getLocation, setGetLocation] = useState(false);
@@ -33,7 +35,7 @@ const Escanear = () => {
     useEffect(() => {
         const fetchAlumnos = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/alumnos');
+                const response = await axios.get(URL+"/alumnos");
                 setAlumnos(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -47,6 +49,7 @@ const Escanear = () => {
         setVal(code.data);
         setStartScan(false);
         setGetLocation(true);
+        setFecha(fecha);
 
         try {
             const qrData = JSON.parse(code.data);
@@ -54,12 +57,13 @@ const Escanear = () => {
             const asistencia: Asistencia = {
                 alumno_id: alumno_data._id,
                 curso_id: qrData.curso_id,
-                fecha: timestamp, // Asignar la fecha actual en formato ISO
+                fecha_profesor: qrData.fecha, // Asignar la fecha actual en formato ISO
+                fecha_alumno: fecha, // Asignar la fecha actual en formato ISO
                 lat: coords?.latitude, // Ejemplo de latitud
                 lng: coords?.longitude, // Ejemplo de longitud
                 asistencia: true
               };
-            const response_asistencia = await axios.post('http://127.0.0.1:8000/asistencia',asistencia);
+            const response_asistencia = await axios.post(URL+"/asistencia",asistencia);
 
             const nombreQR = response_asistencia.data.nombre_alumno;
             
@@ -94,14 +98,13 @@ const Escanear = () => {
             setGetLocation(true); // Solo se actualiza el estado aquí
             if (coords) {
                 console.log(coords);
-                console.log(timestamp);
                 console.log(alumno_data);
             }
 
             // Llamada a la API para obtener el listado de alumnos
-            const response = await axios.get('http://127.0.0.1:8000/alumnos');
+            const response = await axios.get(URL+"/alumnos");
             const nombres = response.data.map((alumno: { nombre: string }) => alumno.nombre);
-            console.log(nombres); // Muestra solo los nombres de los alumnos en la consola
+            //console.log(nombres); // Muestra solo los nombres de los alumnos en la consola
             setAlumnos(response.data); // Guarda los nombres obtenidos en el estado, si es necesario
 
             Swal.fire({

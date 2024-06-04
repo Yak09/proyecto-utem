@@ -15,7 +15,8 @@ export interface Profesor {
 export interface Asistencia{
     alumno_id: string,
     curso_id: string,
-    fecha: number,
+    fecha_profesor: string,
+    fecha_alumno: string,
     lat: number,
     lng: number,
     asistencia: boolean

@@ -5,13 +5,9 @@ import '../config/config.scss';
 
 import Example from '../../components/Carousel.tsx'
 import MiniDrawer from '../../components/drawer.tsx'
-import { AlumnoContext, useAlumnoContext } from '../../hooks/alumnoContext.tsx';
-import { useContext } from 'react';
 
 const CreatePin = () => {
 
-    const data = useContext(AlumnoContext);
-    console.log(data?._id);
     return (
         <>  
             <Example style={{ height: '320px' }}/>

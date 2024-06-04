@@ -37,15 +37,16 @@ const asignaturaAlumno = [
 const Generar = () => {
 
   const data = useContext(profesorContext);
+  const URL = import.meta.env.VITE_API_URL;
   const [asignaturas, setAsignaturas] = useState([]);
   const [fecha, setFecha] = useState(new Date().toLocaleDateString());
+  const fecha_ISO = new Date().toISOString();
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
   const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(null);
   const [qrData, setQRData] = useState('');
   const [error, setError] = useState('');
   /*const alumnoDatos = useContext(AlumnoContext);*/
   const { user, isAuthenticated, isLoading } = useAuth0();
-  console.log(data?._id);
 
   if (isLoading) {
     return <div>Loading ...</div>;
@@ -55,18 +56,17 @@ const Generar = () => {
   useEffect(() => {
     const fetchAsignaturas = async () => {
         try {
-            const response = await axios.get('http://127.0.0.1:8000/profesor_asignaturas',
+            const response = await axios.get(URL+"/profesor_asignaturas",
               {
                 params:{
                   _id: data?._id
                 }
               }
             );
-            const fetchedAsignaturas = response.data.res.map(asignatura => ({
+            const fetchedAsignaturas = response.data.map(asignatura => ({
               label: asignatura.nombre,
               id: asignatura._id
             }));
-            console.log(response.data);
             setAsignaturas(fetchedAsignaturas);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -81,10 +81,9 @@ const Generar = () => {
     }
 
     const qrDataString = JSON.stringify({
-      nombre: user.name,
-      fecha: fecha,
+      fecha: fecha_ISO,
       horario: horarioSeleccionado ? horarioSeleccionado.label : '',
-      asignatura: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
+      curso_id: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
     });
     setQRData(qrDataString);
     setError('');
@@ -98,7 +97,7 @@ const Generar = () => {
         <div className="generar-details">
           <div className="generar-item">
             <span>Nombre Completo:</span>
-            <span>{user.name}</span>
+            <span>{data.nombre}</span>
           </div>
           <div className="generar-item">
             <span>Fecha de solicitud:</span>
@@ -109,6 +108,7 @@ const Generar = () => {
               disablePortal
               id="combo-box-horario"
               options={horarioAlumno}
+              sx={{ width: 375 }}
               value={horarioSeleccionado}
               onChange={(event, newValue) => {
                 setHorarioSeleccionado(newValue);
@@ -124,7 +124,6 @@ const Generar = () => {
               value={asignaturaSeleccionada}
               onChange={(event, newValue) => {
                 setAsignaturaSeleccionada(newValue);
-                console.log(newValue);
               }}
               renderInput={(params) => <TextField {...params} label="Asignatura" />}
             />

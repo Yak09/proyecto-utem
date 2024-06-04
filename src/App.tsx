@@ -20,17 +20,17 @@ import Login from './pages/login/login';
 
 function App() {
   const { isAuthenticated, isLoading } = useAuth0();
-  const [alumnoData, setAlumnoData] = useState<Profesor | null>(null);
-
+  const [alumnoData, setAlumnoData] = useState<Alumno | null>(null);
+  const URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const getAlumnoData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/profesor_info", {
+        const response = await axios.get(URL+"/alumno_info", {
           params: {
-            _id: "66438650d15fd82c65f569fe" /* Actualmente es un profesor */
+            _id: "66444c94e3afe1e1f9c4e3b0" /* Actualmente es un profesor */
           }
         });
-        const datosDelAlumno: Profesor = response.data;
+        const datosDelAlumno: Alumno = response.data;
         setAlumnoData(datosDelAlumno);
       } catch (error) {
         console.error('Error al obtener los datos del alumno:', error);
@@ -45,7 +45,7 @@ function App() {
   }
 
   return (
-    <profesorContext.Provider value={alumnoData}>
+    <AlumnoContext.Provider value={alumnoData}>
       <Router>
         <Routes>
           {/* Redirigir directamente al login */}
@@ -64,7 +64,7 @@ function App() {
           <Route path="/datagrid/:subject" element={isAuthenticated ? <DataGrid /> : <Navigate to="/login" />} />
         </Routes>
       </Router>
-    </profesorContext.Provider>
+    </AlumnoContext.Provider>
   )
 }
 

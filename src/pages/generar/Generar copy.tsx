@@ -45,6 +45,7 @@ const Generar = () => {
   const [error, setError] = useState('');
   /*const alumnoDatos = useContext(AlumnoContext);*/
   const { user, isAuthenticated, isLoading } = useAuth0();
+  console.log(data?._id);
 
   if (isLoading) {
     return <div>Loading ...</div>;
@@ -61,13 +62,18 @@ const Generar = () => {
                 }
               }
             );
+            const fetchedAsignaturas = response.data.res.map(asignatura => ({
+              label: asignatura.nombre,
+              id: asignatura._id
+            }));
             console.log(response.data);
+            setAsignaturas(fetchedAsignaturas);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
     fetchAsignaturas();
-}, []);
+}, [data]);
   const handleGenerarClick = () => {
     if (!user.name|| !horarioSeleccionado || !asignaturaSeleccionada) {
       setError('No se pueden dejar campos vacíos para generar el código QR.');
@@ -78,7 +84,7 @@ const Generar = () => {
       nombre: user.name,
       fecha: fecha,
       horario: horarioSeleccionado ? horarioSeleccionado.label : '',
-      asignatura: asignaturaSeleccionada ? asignaturaSeleccionada.label : '',
+      asignatura: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
     });
     setQRData(qrDataString);
     setError('');
@@ -117,7 +123,7 @@ const Generar = () => {
               options={asignaturas}
               value={asignaturaSeleccionada}
               onChange={(event, newValue) => {
-                setAsignaturaSeleccionada(newValue)
+                setAsignaturaSeleccionada(newValue);
                 console.log(newValue);
               }}
               renderInput={(params) => <TextField {...params} label="Asignatura" />}

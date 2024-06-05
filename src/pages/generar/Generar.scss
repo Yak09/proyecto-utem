@@ -1,6 +1,7 @@
 .generar-container{
     color: #000000;
     padding: 20px;
+    align-items: center;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 
@@ -13,7 +14,6 @@
         align-items: center;
         border-radius: 10px; /* Borde redondeado para el contenido */
         overflow: hidden;
-
         .generar-details{
             flex-grow: 1;
 

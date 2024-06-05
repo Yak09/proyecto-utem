@@ -114,7 +114,8 @@ const Generar = () => {
         </Button>
       </div>
       <div className="generar-qrcode" style={{ marginTop: '20px' }}>
-        {qrData && <QRCode value={qrData} size={256}/>}
+        {qrData && <QRCode value={qrData} includeMargin={true} renderAs={'canvas'} size={268}
+                  style={{ height: "auto", maxWidth: "80%", width: "80%" }}/>}
       </div>
     </div>
   );

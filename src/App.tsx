@@ -19,7 +19,17 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Login from './pages/login/login';
 
 function App() {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) {
+    return <div>Loading ...</div>;
+  }
+
+  const namespace = 'https://your-namespace.com/'; // Asegúrate de que coincide con el namespace en la regla
+  const roles = user[namespace + 'roles'] || [];
+
+  const idRole = roles.length > 1 ? roles[1] : 'sin id rol';
+
   const [alumnoData, setAlumnoData] = useState<Alumno | null>(null);
   const URL = import.meta.env.VITE_API_URL;
   useEffect(() => {

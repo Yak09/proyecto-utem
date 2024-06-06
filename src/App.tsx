@@ -4,7 +4,7 @@ import './App.scss';
 import Home from './pages/home/Home';
 import Perfil from './pages/perfil/Perfil';
 import Generar from './pages/generar/Generar';
-import Generar_Copy from './pages/generar/Generar copy';
+import Generar_Copy from './pages/generar/Generar';
 import Escanear_copy from './pages/escanear/Escanear_copy';
 import CreatePin from './pages/config/CreatePin';
 import Config from './pages/config/Config';
@@ -60,8 +60,7 @@ function App() {
           <Route path="/Home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
           <Route path="/DataGrid" element={isAuthenticated ? <DataGrid /> : <Navigate to="/login" />} />
           <Route path="/Perfil" element={isAuthenticated ? <Perfil /> : <Navigate to="/login" />} />
-          {/* <Route path="/Generar" element={isAuthenticated ? <Generar /> : <Navigate to="/login" />} /> */}
-          <Route path="/Generar" element={isAuthenticated ? <Generar_Copy /> : <Navigate to="/login" />} />
+          <Route path="/Generar" element={isAuthenticated ? <Generar /> : <Navigate to="/login" />} />
           <Route path="/Escanear" element={isAuthenticated ? <Escanear_copy /> : <Navigate to="/login" />} />
           <Route path="/CreatePin" element={isAuthenticated ? <CreatePin /> : <Navigate to="/login" />} />
           <Route path="/Config" element={isAuthenticated ? <Config /> : <Navigate to="/login" />} />

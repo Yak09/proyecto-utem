@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -6,8 +6,9 @@ import './Generar.scss';
 import MiniDrawer from '../../components/drawer.tsx';
 import QRCode from 'qrcode.react';
 import { useContext } from 'react';
-import { AlumnoContext } from '../../hooks/alumnoContext.tsx';
+import { profesorContext } from '../../hooks/profesorContext.tsx';
 import { useAuth0 } from "@auth0/auth0-react";
+import axios from 'axios';
 
 const horarioAlumno = [
   { label: '08:00 - 09:30', periodo: 1 },
@@ -21,32 +22,71 @@ const horarioAlumno = [
   { label: '21:20 - 22:50', periodo: 9 },
 ];
 
-const asignaturaAlumno = [
-  { label: 'TALLER DE MATEMATICA', periodo: 1 },
-  { label: 'CALCULO DIFERENCIAL', periodo: 2 },
-  { label: 'DIBUJO DE INGENIERIA', periodo: 3 },
-  { label: 'ALGORITMOS Y PROGRAMACION', periodo: 4 },
-  { label: 'TALLER DE CIENCIA Y TECNOLOGIA', periodo: 5 },
-  { label: 'CALCULO INTEGRAL', periodo: 6 },
-  { label: 'CIRCUITOS ELECTRICOS', periodo: 7 },
-  { label: 'INGLES I', periodo: 8 },
-  { label: 'SISTEMAS ECONOMICOS', periodo: 9 },
-];
-
 const Generar = () => {
 
+  const data = useContext(profesorContext);
+  const URL = import.meta.env.VITE_API_URL;
+  const [asignaturas, setAsignaturas] = useState([]);
   const [fecha, setFecha] = useState(new Date().toLocaleDateString());
+  const fecha_ISO = new Date().toISOString();
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
   const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(null);
   const [qrData, setQRData] = useState('');
   const [error, setError] = useState('');
-  const alumnoDatos = useContext(AlumnoContext);
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  /*const alumnoDatos = useContext(AlumnoContext);*/
+
+  const { user, isLoading } = useAuth0();
+  const namespace = 'https://your-namespace.com/';
+  const roles = user[namespace + 'roles'] || [];
+  
 
   if (isLoading) {
     return <div>Loading ...</div>;
   }
 
+  
+  useEffect(() => {
+    const fetchAsignaturas = async () => {
+        if(roles[0] === "Profesor"){
+          try {
+            const response = await axios.get(URL+"/cursos/profesor",
+              {
+                params:{
+                  _id: roles[1]
+                }
+              }
+            );
+            const fetchedAsignaturas = response.data.map(asignatura => ({
+              label: asignatura.nombre,
+              id: asignatura._id
+            }));
+            setAsignaturas(fetchedAsignaturas);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        }
+        else{
+          try {
+            const response = await axios.get(URL+"/asignaturas/alumno",
+              {
+                params:{
+                  _id: roles[1]
+                }
+              }
+            );
+            const fetchedAsignaturas = response.data[0].cursos_info.map(asignatura => ({
+              label: asignatura.nombre,
+              id: asignatura.curso_id
+            }));
+            setAsignaturas(fetchedAsignaturas);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        }
+
+    };
+    fetchAsignaturas();
+}, [data]);
   const handleGenerarClick = () => {
     if (!user.name|| !horarioSeleccionado || !asignaturaSeleccionada) {
       setError('No se pueden dejar campos vacíos para generar el código QR.');
@@ -54,10 +94,9 @@ const Generar = () => {
     }
 
     const qrDataString = JSON.stringify({
-      nombre: user.name,
-      fecha: fecha,
+      fecha: fecha_ISO,
       horario: horarioSeleccionado ? horarioSeleccionado.label : '',
-      asignatura: asignaturaSeleccionada ? asignaturaSeleccionada.label : '',
+      curso_id: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
     });
     setQRData(qrDataString);
     setError('');
@@ -82,6 +121,7 @@ const Generar = () => {
               disablePortal
               id="combo-box-horario"
               options={horarioAlumno}
+              sx={{ width: 375 }}
               value={horarioSeleccionado}
               onChange={(event, newValue) => {
                 setHorarioSeleccionado(newValue);
@@ -93,7 +133,7 @@ const Generar = () => {
             <Autocomplete
               disablePortal
               id="combo-box-asignatura"
-              options={asignaturaAlumno}
+              options={asignaturas}
               value={asignaturaSeleccionada}
               onChange={(event, newValue) => {
                 setAsignaturaSeleccionada(newValue);
@@ -115,7 +155,7 @@ const Generar = () => {
       </div>
       <div className="generar-qrcode" style={{ marginTop: '20px' }}>
         {qrData && <QRCode value={qrData} includeMargin={true} renderAs={'canvas'} size={268}
-                  style={{ height: "auto", maxWidth: "80%", width: "80%" }}/>}
+                    style={{ height: "auto", maxWidth: "80%", width: "80%" }}/>}
       </div>
     </div>
   );

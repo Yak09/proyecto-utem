@@ -10,7 +10,7 @@ import CreatePin from './pages/config/CreatePin';
 import Config from './pages/config/Config';
 import DataGrid from './pages/home/dataGrid';
 import SubjectSelection from './components/SubjectSelection';
-import { Alumno,Profesor } from './interfaces/interfaces';
+import { Alumno, Profesor } from './interfaces/interfaces';
 import { AlumnoContext } from './hooks/alumnoContext';
 import { profesorContext } from './hooks/profesorContext';
 import { useEffect, useState } from 'react';
@@ -21,21 +21,17 @@ import Login from './pages/login/login';
 function App() {
   const { user, isAuthenticated, isLoading } = useAuth0();
 
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  }
-
   const namespace = 'https://your-namespace.com/'; // Asegúrate de que coincide con el namespace en la regla
-  const roles = user[namespace + 'roles'] || [];
-
+  const roles = user ? (user[namespace + 'roles'] || []) : [];
   const idRole = roles.length > 1 ? roles[1] : 'sin id rol';
 
   const [alumnoData, setAlumnoData] = useState<Alumno | null>(null);
   const URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const getAlumnoData = async () => {
       try {
-        const response = await axios.get(URL+"/alumno_info", {
+        const response = await axios.get(URL + "/alumno_info", {
           params: {
             _id: "66444c94e3afe1e1f9c4e3b0" /* Actualmente es un profesor */
           }
@@ -48,7 +44,7 @@ function App() {
     };
 
     getAlumnoData();
-  }, []);
+  }, [URL]);
 
   if (isLoading) {
     return <div>Loading ...</div>;
@@ -58,14 +54,13 @@ function App() {
     <AlumnoContext.Provider value={alumnoData}>
       <Router>
         <Routes>
-          {/* Redirigir directamente al login */}
           <Route path="/" element={<Navigate to="/Home" />} />
           <Route path="/login" element={<Login />} />
           {/* Resto de las rutas */}
           <Route path="/Home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
           <Route path="/DataGrid" element={isAuthenticated ? <DataGrid /> : <Navigate to="/login" />} />
           <Route path="/Perfil" element={isAuthenticated ? <Perfil /> : <Navigate to="/login" />} />
-          {/*<Route path="/Generar" element={isAuthenticated ? <Generar /> : <Navigate to="/login" />} />*/}
+          {/* <Route path="/Generar" element={isAuthenticated ? <Generar /> : <Navigate to="/login" />} /> */}
           <Route path="/Generar" element={isAuthenticated ? <Generar_Copy /> : <Navigate to="/login" />} />
           <Route path="/Escanear" element={isAuthenticated ? <Escanear_copy /> : <Navigate to="/login" />} />
           <Route path="/CreatePin" element={isAuthenticated ? <CreatePin /> : <Navigate to="/login" />} />
@@ -75,24 +70,7 @@ function App() {
         </Routes>
       </Router>
     </AlumnoContext.Provider>
-  )
+  );
 }
 
 export default App;
-
-{/* <AlumnoContext.Provider value={alumnoData}>
-<Router>
-  <Routes>
-    <Route path="/" element={<Home />} />
-    <Route path="/Home" element={<Home />} />
-    <Route path="/DataGrid" element={<DataGrid />} />
-    <Route path="/Perfil" element={<Perfil />} />
-    <Route path="/Generar" element={<Generar />} />
-    <Route path="/Escanear" element={<Escanear_copy />} />
-    <Route path="/CreatePin" element={<CreatePin />} />
-    <Route path="/Config" element={<Config />} />
-    <Route path="/select-subject" element={<SubjectSelection />} />
-    <Route path="/datagrid/:subject" element={<DataGrid />} />
-  </Routes>
-</Router>
-</AlumnoContext.Provider> */}

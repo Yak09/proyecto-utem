@@ -9,6 +9,8 @@ import { useContext } from 'react';
 import { profesorContext } from '../../hooks/profesorContext.tsx';
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import {Clase} from '../../interfaces/interfaces.tsx'
 
 const horarioAlumno = [
   { label: '08:00 - 09:30', periodo: 1 },
@@ -33,7 +35,6 @@ const Generar = () => {
   const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(null);
   const [qrData, setQRData] = useState('');
   const [error, setError] = useState('');
-  /*const alumnoDatos = useContext(AlumnoContext);*/
 
   const { user, isLoading } = useAuth0();
   const namespace = 'https://your-namespace.com/';
@@ -43,7 +44,6 @@ const Generar = () => {
   if (isLoading) {
     return <div>Loading ...</div>;
   }
-
   
   useEffect(() => {
     const fetchAsignaturas = async () => {
@@ -87,12 +87,11 @@ const Generar = () => {
     };
     fetchAsignaturas();
 }, [data]);
-  const handleGenerarClick = () => {
+  const handleGenerarClick =   async () => {
     if (!user.name|| !horarioSeleccionado || !asignaturaSeleccionada) {
       setError('No se pueden dejar campos vacíos para generar el código QR.');
       return;
     }
-
     const qrDataString = JSON.stringify({
       fecha: fecha_ISO,
       horario: horarioSeleccionado ? horarioSeleccionado.label : '',
@@ -100,6 +99,26 @@ const Generar = () => {
     });
     setQRData(qrDataString);
     setError('');
+    try {
+      const info_clase: Clase = {
+        curso_id: asignaturaSeleccionada.id,
+        fecha: fecha_ISO
+      };
+      const response_clase = await axios.post(URL + "/inicio_clase", info_clase);
+      console.log(response_clase);
+      Swal.fire({
+        icon: 'success',
+        title: 'Inicio de clase',
+        text: response_clase.data.mensaje,
+    });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al iniciar la clase.',
+    });
+    }
   };
 
   return (

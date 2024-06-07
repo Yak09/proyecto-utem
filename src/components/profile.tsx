@@ -10,8 +10,8 @@ const Profile = () => {
   const namespace = 'https://your-namespace.com/'; // Asegúrate de que coincide con el namespace en la regla
   const roles = user[namespace + 'roles'] || [];
 
-  console.log('User:', user); // Añadir este console.log para depurar
-  console.log('Roles:', roles); // Añadir este console.log para ver los roles
+  //console.log('User:', user); // Añadir este console.log para depurar
+  //console.log('Roles:', roles); // Añadir este console.log para ver los roles
 
   const secondRole = roles.length > 1 ? roles[1] : 'No second role';
   const id_rol = roles[1]

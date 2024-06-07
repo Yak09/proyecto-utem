@@ -25,33 +25,14 @@ function App() {
   const roles = user ? (user[namespace + 'roles'] || []) : [];
   const idRole = roles.length > 1 ? roles[1] : 'sin id rol';
 
-  const [alumnoData, setAlumnoData] = useState<Alumno | null>(null);
   const URL = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    const getAlumnoData = async () => {
-      try {
-        const response = await axios.get(URL + "/alumno_info", {
-          params: {
-            _id: "66444c94e3afe1e1f9c4e3b0" /* Actualmente es un profesor */
-          }
-        });
-        const datosDelAlumno: Alumno = response.data;
-        setAlumnoData(datosDelAlumno);
-      } catch (error) {
-        console.error('Error al obtener los datos del alumno:', error);
-      }
-    };
-
-    getAlumnoData();
-  }, [URL]);
 
   if (isLoading) {
     return <div>Loading ...</div>;
   }
 
   return (
-    <AlumnoContext.Provider value={alumnoData}>
       <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/Home" />} />
@@ -68,7 +49,6 @@ function App() {
           <Route path="/datagrid/:subject" element={isAuthenticated ? <DataGrid /> : <Navigate to="/login" />} />
         </Routes>
       </Router>
-    </AlumnoContext.Provider>
   );
 }
 

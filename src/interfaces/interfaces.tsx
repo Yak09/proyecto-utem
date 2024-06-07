@@ -27,3 +27,8 @@ export interface Asistencia_info{
     nombre_asignatura: string,
     periodo : string
 }
+
+export interface Clase{
+    curso_id: string,
+    fecha: string
+}

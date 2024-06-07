@@ -9,21 +9,23 @@ import Button from '@mui/material/Button';
 import axios from "axios";
 import { useGeolocated } from "react-geolocated";
 import Swal from 'sweetalert2'; // Importa SweetAlert2
-
-import { AlumnoContext } from '../../hooks/alumnoContext.tsx';
+import { useAuth0 } from "@auth0/auth0-react";
 import {Asistencia} from '../../interfaces/interfaces.tsx'
 
 const Escanear = () => {
     const [fecha, setFecha] = useState(new Date().toISOString());
     const URL = import.meta.env.VITE_API_URL;
-    const alumno_data = useContext(AlumnoContext);
     const [startScan, setStartScan] = useState(false);
     const [getLocation, setGetLocation] = useState(false);
     const [val, setVal] = useState<string>('');
     const [alumnos, setAlumnos] = useState([]);
     const navigate = useNavigate(); // Hook para navegación
 
-    const { coords, isGeolocationAvailable, isGeolocationEnabled, timestamp } = useGeolocated({
+    const { user} = useAuth0();
+    const namespace = 'https://your-namespace.com/';
+    const roles = user[namespace + 'roles'] || [];
+
+    const { coords } = useGeolocated({
         positionOptions: {
             enableHighAccuracy: true,
         },
@@ -55,7 +57,7 @@ const Escanear = () => {
             const qrData = JSON.parse(code.data);
 
             const asistencia: Asistencia = {
-                alumno_id: alumno_data._id,
+                alumno_id: roles[1], // Se pasa ID como usuario autentificado
                 curso_id: qrData.curso_id,
                 fecha_profesor: qrData.fecha, // Asignar la fecha actual en formato ISO
                 fecha_alumno: fecha, // Asignar la fecha actual en formato ISO
@@ -98,8 +100,10 @@ const Escanear = () => {
             setGetLocation(true); // Solo se actualiza el estado aquí
             if (coords) {
                 console.log(coords);
-                console.log(alumno_data);
+                console.log(fecha);
             }
+            setGetLocation(false); // Solo se actualiza el estado aquí
+
 
             // Llamada a la API para obtener el listado de alumnos
             const response = await axios.get(URL+"/alumnos");

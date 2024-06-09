@@ -9,7 +9,7 @@ import Escanear_copy from './pages/escanear/Escanear_copy';
 import CreatePin from './pages/config/CreatePin';
 import Config from './pages/config/Config';
 import DataGrid from './pages/home/dataGrid';
-import SubjectSelection from './components/SubjectSelection';
+import Cursos from './pages/cursos/cursos';
 import { Alumno, Profesor } from './interfaces/interfaces';
 import { AlumnoContext } from './hooks/alumnoContext';
 import { profesorContext } from './hooks/profesorContext';
@@ -45,7 +45,7 @@ function App() {
           <Route path="/Escanear" element={isAuthenticated ? <Escanear_copy /> : <Navigate to="/login" />} />
           <Route path="/CreatePin" element={isAuthenticated ? <CreatePin /> : <Navigate to="/login" />} />
           <Route path="/Config" element={isAuthenticated ? <Config /> : <Navigate to="/login" />} />
-          <Route path="/select-subject" element={isAuthenticated ? <SubjectSelection /> : <Navigate to="/login" />} />
+          <Route path="/cursos" element={isAuthenticated ? <Cursos /> : <Navigate to="/login" />} />
           <Route path="/datagrid/:subject" element={isAuthenticated ? <DataGrid /> : <Navigate to="/login" />} />
         </Routes>
       </Router>

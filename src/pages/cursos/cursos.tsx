@@ -1,15 +1,16 @@
 import { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom'; 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import MiniDrawer from '../../components/drawer.tsx';
+import MiniDrawer from '../../components/drawer';
 import axios from 'axios';
 import './Cursos.scss'; // asegúrate de crear este archivo para los estilos
 
-import { profesorContext } from '../../hooks/profesorContext.tsx';
+import { profesorContext } from '../../hooks/profesorContext';
 import { useAuth0 } from "@auth0/auth0-react";
+import { Alumno } from '../../interfaces/interfaces';
 
 const Cursos = () => {
   const data = useContext(profesorContext);
@@ -20,6 +21,8 @@ const Cursos = () => {
   const namespace = 'https://your-namespace.com/';
   const roles = user[namespace + 'roles'] || [];
   
+  const navigate = useNavigate();
+
   if (isLoading) {
     return <div>Loading ...</div>;
   }
@@ -27,7 +30,7 @@ const Cursos = () => {
   useEffect(() => {
     const fetchCursos = async () => {
       try {
-        if(roles[0] === "Profesor"){
+        if (roles[0] === "Profesor") {
           const response = await axios.get(`${URL}/cursos/profesor`, {
             params: { _id: roles[1] }
           });
@@ -45,6 +48,10 @@ const Cursos = () => {
     fetchCursos();
   }, [data, roles, URL]);
 
+  const handleCursoClick = (cursoId) => {
+    navigate(`/asistencia/${cursoId}`);
+  };
+
   return (
     <div className="cursos-container">
       <MiniDrawer />
@@ -52,9 +59,8 @@ const Cursos = () => {
         <h2>Cursos</h2>
         <div className="cursos-list">
           {cursos.map((curso, index) => (
-            <div key={index} className="curso-item">
-              <h3>{curso.nombre}</h3>
-              <p>ID del curso: {curso._id}</p>
+            <div key={index} className="curso-item" onClick={() => handleCursoClick(curso._id)}>
+              <a href="#">{curso.nombre}</a>
             </div>
           ))}
         </div>

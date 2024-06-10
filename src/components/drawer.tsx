@@ -24,6 +24,7 @@ import LoginButton from './loginButton.tsx';
 import LogoutButton from './logout.tsx';
 import Profile from './profile.tsx';
 import { useAuth0 } from '@auth0/auth0-react';
+import logo from '../assets/logo_black_utem.png'; // Ajusta la ruta según tu estructura de carpetas
 
 import Example from './Carousel.tsx'
 
@@ -133,7 +134,7 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <img src="src\assets\logo_black_utem.png" alt="logo" style={{ width: 250, marginRight: 64 }} />
+          <img src={logo} alt="logo" style={{ width: 250, marginRight: 64 }} />
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '16px', paddingRight: '30px' }}>
             <Profile />
             { isAuthenticated ? <LogoutButton />:<LoginButton /> }

@@ -1,32 +1,37 @@
 .cursos-container {
-    padding: 20px;
-  }
-  
-  .cursos-content {
-    max-width: 800px;
-    margin: auto;
-  }
-  
-  .cursos-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .curso-item {
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: calc(50% - 20px); /* Two items per row */
-    box-sizing: border-box;
-  }
-  
-  .curso-item h3 {
-    margin: 0 0 10px 0;
-  }
-  
-  .curso-item p {
-    margin: 0;
-  }
-  
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.cursos-content {
+  max-width: 800px;
+  margin: auto;
+}
+
+.cursos-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.curso-item {
+  background: #F5F8FD;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  width: calc(50% - 20px); /* Two items per row */
+  box-sizing: border-box;
+  cursor: pointer; /* Change cursor to pointer */
+}
+
+.curso-item a {
+  margin: 0 0 10px 0;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.curso-item p {
+  margin: 0;
+}

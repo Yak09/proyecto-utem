@@ -109,7 +109,8 @@ const Generar = () => {
         curso_id: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
       };
       const response_qr = await axios.post(URL+"/jwt/encriptar",qrDataString);
-      setQRData(response_qr.data.res);
+      console.log(response_qr.data)
+      setQRData(response_qr.data);
       setError('');
       try {
         const info_clase: Clase = {

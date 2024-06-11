@@ -105,7 +105,7 @@ const Generar = () => {
     if (roles[0] === "Profesor"){
       const qrDataString = {
         fecha: fecha_ISO,
-        horario: horarioSeleccionado ? horarioSeleccionado.label : '',
+        horario: horarioSeleccionado ? horarioSeleccionado.periodo : '',
         curso_id: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
       };
       const response_qr = await axios.post(URL+"/jwt/encriptar",qrDataString);
@@ -144,7 +144,7 @@ const Generar = () => {
         lng:coords?.longitude
       };
       const response_qr = await axios.post(URL+"/jwt/encriptar",qrDataString);
-      setQRData(response_qr.data.res);
+      setQRData(response_qr.data);
       setError('');
       setGetLocation(false);
     }

@@ -105,7 +105,7 @@ const Generar = () => {
     if (roles[0] === "Profesor"){
       const qrDataString = {
         fecha: fecha_ISO,
-        horario: horarioSeleccionado ? horarioSeleccionado.label : '',
+        horario: horarioSeleccionado ? horarioSeleccionado.periodo : '',
         curso_id: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
       };
       const response_qr = await axios.post(URL+"/jwt/encriptar",qrDataString);
@@ -115,7 +115,8 @@ const Generar = () => {
       try {
         const info_clase: Clase = {
           curso_id: asignaturaSeleccionada.id,
-          fecha: fecha_ISO
+          fecha: fecha_ISO,
+          periodo: horarioSeleccionado.periodo,
         };
         const response_clase = await axios.post(URL + "/inicio_clase", info_clase);
         console.log(response_clase);

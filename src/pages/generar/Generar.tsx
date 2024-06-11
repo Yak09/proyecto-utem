@@ -144,7 +144,7 @@ const Generar = () => {
         lng:coords?.longitude
       };
       const response_qr = await axios.post(URL+"/jwt/encriptar",qrDataString);
-      setQRData(response_qr.data.res);
+      setQRData(response_qr.data);
       setError('');
       setGetLocation(false);
     }

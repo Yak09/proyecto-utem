@@ -126,7 +126,7 @@ export default function MiniDrawer() {
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
-            edge="start"
+            edge="end"
             sx={{
               marginRight: 5,
               ...(open && { display: 'none' }),

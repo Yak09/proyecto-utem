@@ -64,7 +64,6 @@ const Escanear = () => {
                   };
                 const payload ={estudiante:asistencia,
                                 profesor:qrData};
-                console.log(payload);
                 const response_asistencia = await axios.put(URL+"/asistencia/alumno",payload);
                 setGetLocation(false);
     
@@ -140,10 +139,6 @@ const Escanear = () => {
     const handleClick = async () => {
         try {
             setGetLocation(true); // Solo se actualiza el estado aquí
-            if (coords) {
-                console.log(coords);
-                console.log(fecha);
-            }
             setGetLocation(false); // Solo se actualiza el estado aquí
 
 

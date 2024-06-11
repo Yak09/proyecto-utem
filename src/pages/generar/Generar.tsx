@@ -3,15 +3,14 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import './Generar.scss';
-import MiniDrawer from '../../components/drawer.tsx';
 import QRCode from 'qrcode.react';
-import { useContext } from 'react';
-import { profesorContext } from '../../hooks/profesorContext.tsx';
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import {Clase} from '../../interfaces/interfaces.tsx'
 import { useGeolocated } from "react-geolocated";
+
+import {Clase} from '../../interfaces/interfaces.tsx'
+import MiniDrawer from '../../components/drawer.tsx';
 
 const horarioAlumno = [
   { label: '08:00 - 09:30', periodo: 1 },
@@ -27,7 +26,6 @@ const horarioAlumno = [
 
 const Generar = () => {
 
-  const data = useContext(profesorContext);
   const URL = import.meta.env.VITE_API_URL;
   const [asignaturas, setAsignaturas] = useState([]);
   const [fecha, setFecha] = useState(new Date().toLocaleDateString());
@@ -95,7 +93,7 @@ const Generar = () => {
 
     };
     fetchAsignaturas();
-}, [data]);
+}, []);
   const handleGenerarClick =   async () => {
     if (!user.name|| !horarioSeleccionado || !asignaturaSeleccionada) {
       setError('No se pueden dejar campos vacíos para generar el código QR.');
@@ -109,28 +107,25 @@ const Generar = () => {
         curso_id: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
       };
       const response_qr = await axios.post(URL+"/jwt/encriptar",qrDataString);
-      console.log(response_qr.data)
-      setQRData(response_qr.data);
       setError('');
       try {
         const info_clase: Clase = {
           curso_id: asignaturaSeleccionada.id,
           fecha: fecha_ISO,
-          periodo: horarioSeleccionado.periodo,
+          periodo: horarioSeleccionado.periodo
         };
         const response_clase = await axios.post(URL + "/inicio_clase", info_clase);
-        console.log(response_clase);
         Swal.fire({
           icon: 'success',
           title: 'Inicio de clase',
           text: response_clase.data.mensaje,
       });
+      setQRData(response_qr.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Hubo un problema al iniciar la clase.',
+          text: error.response.data.detail,
       });
       }
     }

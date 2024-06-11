@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -10,6 +10,8 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { Clase } from '../../interfaces/interfaces.tsx';
 import { useGeolocated } from "react-geolocated";
+import { toPng } from 'html-to-image';
+import download from 'downloadjs';
 
 import MiniDrawer from '../../components/drawer.tsx';
 
@@ -33,13 +35,14 @@ const Generar = () => {
   const [fecha, setFecha] = useState(new Date().toLocaleDateString());
   const fecha_ISO = new Date().toISOString();
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(horarioAlumno.find(h => h.periodo === selectedPeriodo) || null);
-  const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(asignaturas.find(a => a.id === cursoId) || null);
+  const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(null);
   const [qrData, setQRData] = useState('');
   const [error, setError] = useState('');
   const [getLocation, setGetLocation] = useState(false);
   const { user, isLoading } = useAuth0();
   const namespace = 'https://your-namespace.com/';
   const roles = user[namespace + 'roles'] || [];
+  const qrRef = useRef(null);
   
   const { coords } = useGeolocated({
     positionOptions: {
@@ -54,7 +57,7 @@ const Generar = () => {
     const fetchAsignaturas = async () => {
       if (roles[0] === "Profesor") {
         try {
-          const response = await axios.get(URL+"/cursos/profesor", {
+          const response = await axios.get(URL + "/cursos/profesor", {
             params: {
               _id: roles[1]
             }
@@ -64,12 +67,17 @@ const Generar = () => {
             id: asignatura._id
           }));
           setAsignaturas(fetchedAsignaturas);
+
+          if (cursoId) {
+            const selectedAsignatura = fetchedAsignaturas.find(a => a.id === cursoId);
+            setAsignaturaSeleccionada(selectedAsignatura);
+          }
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       } else {
         try {
-          const response = await axios.get(URL+"/asignaturas/alumno", {
+          const response = await axios.get(URL + "/asignaturas/alumno", {
             params: {
               _id: roles[1]
             }
@@ -79,15 +87,21 @@ const Generar = () => {
             id: asignatura._id
           }));
           setAsignaturas(fetchedAsignaturas);
+
+          if (cursoId) {
+            const selectedAsignatura = fetchedAsignaturas.find(a => a.id === cursoId);
+            setAsignaturaSeleccionada(selectedAsignatura);
+          }
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       }
     };
     fetchAsignaturas();
-}, []);
-  const handleGenerarClick =   async () => {
-    if (!user?.name|| !horarioSeleccionado || !asignaturaSeleccionada) {
+  }, [roles, URL, cursoId]);
+
+  const handleGenerarClick = async () => {
+    if (!user?.name || !horarioSeleccionado || !asignaturaSeleccionada) {
       setError('No se pueden dejar campos vacíos para generar el código QR.');
       return;
     }
@@ -98,10 +112,10 @@ const Generar = () => {
         horario: horarioSeleccionado ? horarioSeleccionado.periodo : '',
         curso_id: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
       };
-      const response_qr = await axios.post(URL+"/jwt/encriptar",qrDataString);
+      const response_qr = await axios.post(URL + "/jwt/encriptar", qrDataString);
       setError('');
       try {
-        const info_clase: Clase = {
+        const info_clase = {
           curso_id: asignaturaSeleccionada.id,
           fecha: fecha_ISO,
           periodo: horarioSeleccionado.periodo
@@ -111,29 +125,36 @@ const Generar = () => {
           icon: 'success',
           title: 'Inicio de clase',
           text: response_clase.data.mensaje,
-      });
-      setQRData(response_qr.data);
+        });
+        setQRData(response_qr.data);
       } catch (error) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: error.response.data.detail,
-      });
+        });
       }
     } else {
       setGetLocation(true);
       const qrDataString = {
         alumno_id: roles[1],
         curso_id: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
-        horario      : horarioSeleccionado.label,
+        horario: horarioSeleccionado.label,
         fecha: fecha_ISO,
         lat: coords?.latitude,
         lng: coords?.longitude
       };
-      const response_qr = await axios.post(URL+"/jwt/encriptar", qrDataString);
+      const response_qr = await axios.post(URL + "/jwt/encriptar", qrDataString);
       setQRData(response_qr.data);
       setError('');
       setGetLocation(false);
+    }
+  };
+
+  const handleDownloadClick = async () => {
+    if (qrRef.current) {
+      const dataUrl = await toPng(qrRef.current);
+      download(dataUrl, 'qr-code.png');
     }
   };
 
@@ -189,9 +210,20 @@ const Generar = () => {
         </Button>
       </div>
       <div className="generar-qrcode" style={{ marginTop: '20px' }}>
-        {qrData && <QRCode value={qrData} includeMargin={true} renderAs={'canvas'} size={268}
-                    style={{ height: "auto", maxWidth: "80%", width: "80%" }}/>}
+        {qrData && (
+          <div ref={qrRef}>
+            <QRCode value={qrData} includeMargin={true} renderAs={'canvas'} size={268}
+              style={{ height: "auto", maxWidth: "80%", width: "80%" }} />
+          </div>
+        )}
       </div>
+      {qrData && (
+        <div className="generar-button" style={{ marginTop: '20px' }}>
+          <Button variant="contained" onClick={handleDownloadClick}>
+            Descargar QR
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

@@ -51,6 +51,7 @@ export default function DataGridWithAssistance() {
   const [rows, setRows] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]); // Fecha inicial en formato ISO sin la hora
   const [selectedPeriodo, setSelectedPeriodo] = useState(1); // Periodo inicial por defecto
+  
   const fetchData = async (fecha, periodo) => {
     try {
       const response = await axios.get(`${URL}/asistencia/clase`, {
@@ -96,9 +97,9 @@ export default function DataGridWithAssistance() {
     navigate(`/cursos/`); 
   };
 
-  const handleBackGenerar = () =>{
+  const handleBackGenerar = () => {
     navigate(`/Generar/`, { state: { selectedDate, selectedPeriodo, cursoId } });
-  }
+  };
 
   return (
     <Box sx={{ height: 700, width: '100%' }}>
@@ -147,12 +148,11 @@ export default function DataGridWithAssistance() {
         checkboxSelection
         disableRowSelectionOnClick
       />
-      <Box sx={{ display: 'flex', justifyContent: 'space-around', marginBottom: 2, padding:'20px' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2, padding: '20px' }}>
         <Button variant="contained" color="secondary" onClick={handleBackGenerar}>
           Generar QR
         </Button>
       </Box>
     </Box>
-    
   );
 }

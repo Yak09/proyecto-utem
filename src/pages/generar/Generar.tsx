@@ -115,7 +115,8 @@ const Generar = () => {
       try {
         const info_clase: Clase = {
           curso_id: asignaturaSeleccionada.id,
-          fecha: fecha_ISO
+          fecha: fecha_ISO,
+          periodo: horarioSeleccionado.periodo,
         };
         const response_clase = await axios.post(URL + "/inicio_clase", info_clase);
         console.log(response_clase);

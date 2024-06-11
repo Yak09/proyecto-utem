@@ -31,4 +31,5 @@ export interface Asistencia_info{
 export interface Clase{
     curso_id: string,
     fecha: string
+    periodo: number
 }

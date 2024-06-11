@@ -120,7 +120,7 @@ export default function MiniDrawer() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} color="transparent">
+      <AppBar position="fixed" open={open} color="default">
         <Toolbar disableGutters>
           <IconButton
             color="inherit"
@@ -139,7 +139,7 @@ export default function MiniDrawer() {
             <Profile />
             { isAuthenticated ? <LogoutButton />:<LoginButton /> }
           </div>
-        </Toolbar>
+        </Toolbar >
 
       </AppBar>
       

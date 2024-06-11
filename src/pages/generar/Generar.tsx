@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -7,9 +8,9 @@ import QRCode from 'qrcode.react';
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { Clase } from '../../interfaces/interfaces.tsx';
 import { useGeolocated } from "react-geolocated";
 
-import {Clase} from '../../interfaces/interfaces.tsx'
 import MiniDrawer from '../../components/drawer.tsx';
 
 const horarioAlumno = [
@@ -25,13 +26,14 @@ const horarioAlumno = [
 ];
 
 const Generar = () => {
-
+  const location = useLocation();
+  const { selectedDate, selectedPeriodo, cursoId } = location.state || {};
   const URL = import.meta.env.VITE_API_URL;
   const [asignaturas, setAsignaturas] = useState([]);
   const [fecha, setFecha] = useState(new Date().toLocaleDateString());
   const fecha_ISO = new Date().toISOString();
-  const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
-  const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(null);
+  const [horarioSeleccionado, setHorarioSeleccionado] = useState(horarioAlumno.find(h => h.periodo === selectedPeriodo) || null);
+  const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(asignaturas.find(a => a.id === cursoId) || null);
   const [qrData, setQRData] = useState('');
   const [error, setError] = useState('');
   const [getLocation, setGetLocation] = useState(false);
@@ -46,61 +48,51 @@ const Generar = () => {
     userDecisionTimeout: 5000,
     watchPosition: getLocation,
     watchLocationPermissionChange: true // Solo obtener la geolocalización si getLocation es true
-    });
+  });
 
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  }
-  
   useEffect(() => {
     const fetchAsignaturas = async () => {
-        if(roles[0] === "Profesor"){
-          try {
-            const response = await axios.get(URL+"/cursos/profesor",
-              {
-                params:{
-                  _id: roles[1]
-                }
-              }
-            );
-            const fetchedAsignaturas = response.data.map(asignatura => ({
-              label: asignatura.nombre,
-              id: asignatura._id
-            }));
-            setAsignaturas(fetchedAsignaturas);
+      if (roles[0] === "Profesor") {
+        try {
+          const response = await axios.get(URL+"/cursos/profesor", {
+            params: {
+              _id: roles[1]
+            }
+          });
+          const fetchedAsignaturas = response.data.map(asignatura => ({
+            label: asignatura.nombre,
+            id: asignatura._id
+          }));
+          setAsignaturas(fetchedAsignaturas);
         } catch (error) {
-            console.error('Error fetching data:', error);
+          console.error('Error fetching data:', error);
         }
-        }
-        else{
-          try {
-            const response = await axios.get(URL+"/asignaturas/alumno",
-              {
-                params:{
-                  _id: roles[1]
-                }
-              }
-            );
-            const fetchedAsignaturas = response.data[0].cursos_info.map(asignatura => ({
-              label: asignatura.nombre,
-              id: asignatura._id
-            }));
-            setAsignaturas(fetchedAsignaturas);
+      } else {
+        try {
+          const response = await axios.get(URL+"/asignaturas/alumno", {
+            params: {
+              _id: roles[1]
+            }
+          });
+          const fetchedAsignaturas = response.data[0].cursos_info.map(asignatura => ({
+            label: asignatura.nombre,
+            id: asignatura._id
+          }));
+          setAsignaturas(fetchedAsignaturas);
         } catch (error) {
-            console.error('Error fetching data:', error);
+          console.error('Error fetching data:', error);
         }
-        }
-
+      }
     };
     fetchAsignaturas();
 }, []);
   const handleGenerarClick =   async () => {
-    if (!user.name|| !horarioSeleccionado || !asignaturaSeleccionada) {
+    if (!user?.name|| !horarioSeleccionado || !asignaturaSeleccionada) {
       setError('No se pueden dejar campos vacíos para generar el código QR.');
       return;
     }
     
-    if (roles[0] === "Profesor"){
+    if (roles[0] === "Profesor") {
       const qrDataString = {
         fecha: fecha_ISO,
         horario: horarioSeleccionado ? horarioSeleccionado.periodo : '',
@@ -128,18 +120,17 @@ const Generar = () => {
           text: error.response.data.detail,
       });
       }
-    }
-    else{
+    } else {
       setGetLocation(true);
       const qrDataString = {
         alumno_id: roles[1],
         curso_id: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
-        horario: horarioSeleccionado ? horarioSeleccionado.label : '',
+        horario      : horarioSeleccionado.label,
         fecha: fecha_ISO,
-        lat:coords?.latitude,
-        lng:coords?.longitude
+        lat: coords?.latitude,
+        lng: coords?.longitude
       };
-      const response_qr = await axios.post(URL+"/jwt/encriptar",qrDataString);
+      const response_qr = await axios.post(URL+"/jwt/encriptar", qrDataString);
       setQRData(response_qr.data);
       setError('');
       setGetLocation(false);

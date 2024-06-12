@@ -52,6 +52,7 @@ const Escanear = () => {
         setStartScan(false);
         setGetLocation(true);
         setFecha(fecha);
+        console.log(roles[0]);
         if(roles[0]==="Estudiante"){
             try {
                 const qrData = (code.data);
@@ -206,9 +207,9 @@ const Escanear = () => {
                 <Box sx={{ margin: "auto", textAlign: "center" }}>
                     <QrCodeReader
                         delay={500}
-                        width={500}
                         facingMode={"environment"}
-                        height={500}
+                        width={500}
+                        height={350}
                         onRead={handleRead} />
                 </Box>
             )}

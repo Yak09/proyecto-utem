@@ -105,14 +105,14 @@ const Generar = () => {
       setError('No se pueden dejar campos vacíos para generar el código QR.');
       return;
     }
-    
+    console.log(roles[0])
     if (roles[0] === "Profesor") {
       const qrDataString = {
         fecha: fecha_ISO,
         horario: horarioSeleccionado ? horarioSeleccionado.periodo : '',
         curso_id: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
       };
-      const response_qr = await axios.post(URL + "/jwt/encriptar", qrDataString);
+      const response_qr_profesor = await axios.post(URL + "/jwt/encriptar", qrDataString);
       setError('');
       try {
         const info_clase = {
@@ -126,7 +126,7 @@ const Generar = () => {
           title: 'Inicio de clase',
           text: response_clase.data.mensaje,
         });
-        setQRData(response_qr.data);
+        setQRData(response_qr_profesor.data);
       } catch (error) {
         Swal.fire({
           icon: 'error',
@@ -134,18 +134,20 @@ const Generar = () => {
           text: error.response.data.detail,
         });
       }
-    } else {
+    } 
+    else {
       setGetLocation(true);
       const qrDataString = {
         alumno_id: roles[1],
         curso_id: asignaturaSeleccionada ? asignaturaSeleccionada.id : '',
-        horario: horarioSeleccionado.label,
-        fecha: fecha_ISO,
+        horario: horarioSeleccionado.periodo,
+        fecha_alumno: fecha_ISO,
         lat: coords?.latitude,
         lng: coords?.longitude
       };
-      const response_qr = await axios.post(URL + "/jwt/encriptar", qrDataString);
-      setQRData(response_qr.data);
+      console.log(qrDataString);
+      const response_qr_alumno = await axios.post(URL + "/jwt/encriptar", qrDataString);
+      setQRData(response_qr_alumno.data);
       setError('');
       setGetLocation(false);
     }

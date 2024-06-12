@@ -34,7 +34,7 @@ const Profile = () => {
                 ))}
               </ul> */}
               <div style={{ marginTop: '10px' }}>
-                <strong>id Profesor:</strong> <span style={{ fontSize: '14px', color: 'blue' }}>{id_rol}</span>
+                <strong>id:</strong> <span style={{ fontSize: '14px', color: 'blue' }}>{id_rol}</span>
               </div>
             </div>
           )}

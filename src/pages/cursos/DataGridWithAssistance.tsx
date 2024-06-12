@@ -13,6 +13,8 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 
+import Typography from '@mui/material/Typography';
+
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 90, editable: false },
   {
@@ -48,10 +50,24 @@ export default function DataGridWithAssistance() {
   const { cursoId } = useParams();
   const navigate = useNavigate();
   const URL = import.meta.env.VITE_API_URL;
+  const [curso,setCurso] = useState("");
   const [rows, setRows] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]); // Fecha inicial en formato ISO sin la hora
   const [selectedPeriodo, setSelectedPeriodo] = useState(1); // Periodo inicial por defecto
   
+  const fetchCurso = async() =>{
+    try {
+      const response_curso = await axios.get(URL+"/asignatura/info",{
+        params: {
+          curso_id: cursoId,
+        }
+      });
+      setCurso(response_curso.data[0].nombre);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
   const fetchData = async (fecha, periodo) => {
     try {
       const response = await axios.get(`${URL}/asistencia/clase`, {
@@ -61,8 +77,6 @@ export default function DataGridWithAssistance() {
           periodo: periodo
         }
       });
-
-      console.log('API Response:', response.data.res); // Log para ver la respuesta de la API
 
       const data = response.data.res.map((item, index) => ({
         id: index + 1,
@@ -76,9 +90,12 @@ export default function DataGridWithAssistance() {
       console.error('Error fetching data:', error);
     }
   };
+  
 
   useEffect(() => {
-    fetchData(selectedDate, selectedPeriodo);
+    fetchCurso();
+    fetchData(selectedDate, selectedPeriodo);  
+
   }, [cursoId, selectedDate, selectedPeriodo, URL]);
 
   const handleDateChange = (event) => {
@@ -104,6 +121,11 @@ export default function DataGridWithAssistance() {
   return (
     <Box sx={{ height: 700, width: '100%' }}>
       <MiniDrawer />
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
+          <Typography variant="h3" gutterBottom>
+            {curso}
+          </Typography>
+      </Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
         <Button variant="contained" color="primary" onClick={handleBackClick}>
           Regresar

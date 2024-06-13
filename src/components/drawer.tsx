@@ -129,7 +129,7 @@ export default function MiniDrawer() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} color="transparent">
+      <AppBar position="fixed" open={open} color="default">
         <Toolbar disableGutters>
           <IconButton
             color="inherit"
@@ -148,7 +148,12 @@ export default function MiniDrawer() {
             <Profile />
             { isAuthenticated ? <LogoutButton />:<LoginButton /> }
           </div>
+<<<<<<< HEAD
         </Toolbar>
+=======
+        </Toolbar >
+
+>>>>>>> c40fca75f770a583150f2a6214a912a819fd3f05
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>

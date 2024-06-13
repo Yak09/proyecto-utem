@@ -52,6 +52,7 @@ const Escanear = () => {
         setStartScan(false);
         setGetLocation(true);
         setFecha(fecha);
+        console.log(roles[0]);
         if(roles[0]==="Estudiante"){
             try {
                 const qrData = (code.data);
@@ -64,7 +65,6 @@ const Escanear = () => {
                   };
                 const payload ={estudiante:asistencia,
                                 profesor:qrData};
-                console.log(payload);
                 const response_asistencia = await axios.put(URL+"/asistencia/alumno",payload);
                 setGetLocation(false);
     
@@ -140,10 +140,6 @@ const Escanear = () => {
     const handleClick = async () => {
         try {
             setGetLocation(true); // Solo se actualiza el estado aquí
-            if (coords) {
-                console.log(coords);
-                console.log(fecha);
-            }
             setGetLocation(false); // Solo se actualiza el estado aquí
 
 
@@ -211,9 +207,9 @@ const Escanear = () => {
                 <Box sx={{ margin: "auto", textAlign: "center" }}>
                     <QrCodeReader
                         delay={500}
-                        width={500}
                         facingMode={"environment"}
-                        height={500}
+                        width={500}
+                        height={350}
                         onRead={handleRead} />
                 </Box>
             )}

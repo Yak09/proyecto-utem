@@ -102,7 +102,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function MiniDrawer() {
+const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
@@ -140,20 +140,15 @@ export default function MiniDrawer() {
               marginRight: 5,
               ...(open && { display: 'none' }),
             }}
-          >
-            
+          > 
+          <MenuIcon/>
           </IconButton>
           <img src={logo} alt="logo" style={{ width: 250, marginRight: 64 }} />
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '16px', paddingRight: '30px' }}>
             <Profile />
             { isAuthenticated ? <LogoutButton />:<LoginButton /> }
           </div>
-<<<<<<< HEAD
         </Toolbar>
-=======
-        </Toolbar >
-
->>>>>>> c40fca75f770a583150f2a6214a912a819fd3f05
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
@@ -188,7 +183,12 @@ export default function MiniDrawer() {
         </List>
         <Divider />
       </Drawer>
+      <DrawerHeader />
+        {children}
     </Box>
     
   )
 }
+
+
+export default MiniDrawer;

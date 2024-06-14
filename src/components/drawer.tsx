@@ -26,6 +26,7 @@ import Profile from './profile.tsx';
 import { useAuth0 } from '@auth0/auth0-react';
 import logo from '../assets/logo_black_utem.png'; // Ajusta la ruta según tu estructura de carpetas
 import { useNavigate } from "react-router-dom";
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 const drawerWidth = 240;
 
@@ -110,7 +111,7 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     { text: 'Perfil', icon: <Person2Icon />, path: '/Perfil' },
     { text: 'Libro de clases', icon: <MenuBookIcon />, path: '/cursos', role: 'Profesor' },
     { text: 'Generar QR', icon: <QrCodeIcon />, path: '/Generar' },
-    { text: 'Escanear QR', icon: <QrCodeIcon />, path: '/Escanear' },
+    { text: 'Escanear QR', icon: <CameraAltIcon />, path: '/Escanear' },
     { text: 'Configuración', icon: <BuildIcon />, path: '/Config' },
   ];
 

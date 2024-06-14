@@ -9,7 +9,7 @@ const CreatePin = () => {
     return (
         <>
             <div className="config-container">
-            <MiniDrawer />
+            {/*<MiniDrawer />*/}
                 <div className='titlePin'>
                     <h2>Parece que aún no tienes tu pin <br/> de registro de asistencia</h2>
                 </div>

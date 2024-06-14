@@ -22,7 +22,7 @@ const Config = () => {
     return (
         <>
             <div className="config-container">
-            <MiniDrawer />
+            {/*<MiniDrawer />*/}
                 <h2>Registro</h2>
                 <p>Crea un PIN para usarlo en el <br />
                 registro de tu asistencia</p>

@@ -162,7 +162,7 @@ const Generar = () => {
 
   return (
     <div className="generar-container">
-      <MiniDrawer />
+      {/*<MiniDrawer />*/}
       <h2>Generar QR</h2>
       <div className="generar-content">
         <div className="generar-details">

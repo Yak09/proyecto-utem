@@ -12,6 +12,7 @@ import Cursos from './pages/cursos/cursos';
 import DataGridWithAssistance from './pages/cursos/DataGridWithAssistance';
 import { useAuth0 } from "@auth0/auth0-react";
 import Login from './pages/login/login';
+import MiniDrawer from './components/drawer';
 
 function App() {
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -28,20 +29,22 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/Home" />} />
-        <Route path="/login" element={<Login />} />
-        {/* Resto de las rutas */}
-        <Route path="/Home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
-        <Route path="/DataGrid" element={isAuthenticated ? <DataGrid /> : <Navigate to="/login" />} />
-        <Route path="/Perfil" element={isAuthenticated ? <Perfil /> : <Navigate to="/login" />} />
-        <Route path="/Generar" element={isAuthenticated ? <Generar /> : <Navigate to="/login" />} />
-        <Route path="/Escanear" element={isAuthenticated ? <Escanear_copy /> : <Navigate to="/login" />} />
-        <Route path="/CreatePin" element={isAuthenticated ? <CreatePin /> : <Navigate to="/login" />} />
-        <Route path="/Config" element={isAuthenticated ? <Config /> : <Navigate to="/login" />} />
-        <Route path="/cursos" element={isAuthenticated ? <Cursos /> : <Navigate to="/login" />} />
-        <Route path="/asistencia/:cursoId" element={isAuthenticated ? <DataGridWithAssistance /> : <Navigate to="/login" />} /> {/* Ruta para mostrar el DataGrid de asistencia */}
-      </Routes>
+      <MiniDrawer>
+        <Routes>
+          <Route path="/" element={<Navigate to="/Home" />} />
+          <Route path="/login" element={<Login />} />
+          {/* Resto de las rutas */}
+          <Route path="/Home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/DataGrid" element={isAuthenticated ? <DataGrid /> : <Navigate to="/login" />} />
+          <Route path="/Perfil" element={isAuthenticated ? <Perfil /> : <Navigate to="/login" />} />
+          <Route path="/Generar" element={isAuthenticated ? <Generar /> : <Navigate to="/login" />} />
+          <Route path="/Escanear" element={isAuthenticated ? <Escanear_copy /> : <Navigate to="/login" />} />
+          <Route path="/CreatePin" element={isAuthenticated ? <CreatePin /> : <Navigate to="/login" />} />
+          <Route path="/Config" element={isAuthenticated ? <Config /> : <Navigate to="/login" />} />
+          <Route path="/cursos" element={isAuthenticated ? <Cursos /> : <Navigate to="/login" />} />
+          <Route path="/asistencia/:cursoId" element={isAuthenticated ? <DataGridWithAssistance /> : <Navigate to="/login" />} /> {/* Ruta para mostrar el DataGrid de asistencia */}
+        </Routes>
+      </MiniDrawer>
     </Router>
   );
 }

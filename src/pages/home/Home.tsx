@@ -10,11 +10,8 @@ const CreatePin = () => {
 
     return (
         <>  
-            <Example style={{ height: '320px' }}/>
             <div className="config-container">
-            <MiniDrawer />
-            
-
+            {/*<MiniDrawer />*/}
                 <h3>Registro de Asistencia</h3> <br/>
                 {/* Utiliza Link para enlazar al botón con la ruta de Config */}
                 <Link to="../Generar">

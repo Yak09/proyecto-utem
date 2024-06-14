@@ -32,6 +32,7 @@ import {useNavigate} from "react-router-dom";
 
 const drawerWidth = 240;
 
+
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -101,10 +102,18 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function MiniDrawer() {
+const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+
+  const menuItems = [
+    { text: 'Home', icon: <HomeIcon />, path: '/Home' },
+    { text: 'Perfil', icon: <Person2Icon />, path: '/Perfil' },
+    { text: 'Generar QR', icon: <QrCodeIcon />, path: '/Generar' },
+    { text: 'Escanear QR', icon: <QrCodeIcon />, path: '/Escanear' },
+    { text: 'Configuración', icon: <BuildIcon />, path: '/Config' },
+  ];
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -131,19 +140,16 @@ export default function MiniDrawer() {
               marginRight: 5,
               ...(open && { display: 'none' }),
             }}
-          >
-            <MenuIcon />
+          > 
+          <MenuIcon/>
           </IconButton>
           <img src={logo} alt="logo" style={{ width: 250, marginRight: 64 }} />
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '16px', paddingRight: '30px' }}>
             <Profile />
             { isAuthenticated ? <LogoutButton />:<LoginButton /> }
           </div>
-        </Toolbar >
-
+        </Toolbar>
       </AppBar>
-      
-      
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
@@ -152,7 +158,8 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-                  <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/Home")}}>
+        {menuItems.map((item, index) => (
+                  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => navigate(item.path)} key={index}>
               <ListItemButton
               sx={{
                 minHeight: 48,
@@ -167,95 +174,21 @@ export default function MiniDrawer() {
                 justifyContent: 'center',
                 }}
               >
-                <HomeIcon />
+                {item.icon}
               </ListItemIcon>
-              <ListItemText primary='Home' sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
-              <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/Perfil")}}>
-              <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-              >
-              <ListItemIcon
-                sx={{
-                minWidth: 0,
-                mr: open ? 3 : 'auto',
-                justifyContent: 'center',
-                }}
-              >
-                <Person2Icon />
-              </ListItemIcon>
-              <ListItemText primary='Perfil' sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/Generar")}}>
-            <ListItemButton
-            sx={{
-              minHeight: 48,
-              justifyContent: open ? 'initial' : 'center',
-              px: 2.5,
-            }}
-            >
-            <ListItemIcon
-              sx={{
-              minWidth: 0,
-              mr: open ? 3 : 'auto',
-              justifyContent: 'center',
-              }}
-            >
-              <QrCodeIcon />
-            </ListItemIcon>
-            <ListItemText primary='Generar QR' sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-            <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/Escanear")}}>
-            <ListItemButton
-            sx={{
-              minHeight: 48,
-              justifyContent: open ? 'initial' : 'center',
-              px: 2.5,
-            }}
-            >
-            <ListItemIcon
-              sx={{
-              minWidth: 0,
-              mr: open ? 3 : 'auto',
-              justifyContent: 'center',
-              }}
-            >
-              <QrCodeIcon />
-            </ListItemIcon>
-            <ListItemText primary='Escanear QR' sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-              <ListItem disablePadding sx={{ display: 'block' }} onClick={()=>{navigate("/Config")}}>
-            <ListItemButton
-            sx={{
-              minHeight: 48,
-              justifyContent: open ? 'initial' : 'center',
-              px: 2.5,
-            }}
-            >
-            <ListItemIcon
-              sx={{
-              minWidth: 0,
-              mr: open ? 3 : 'auto',
-              justifyContent: 'center',
-              }}
-            >
-              <BuildIcon />
-            </ListItemIcon>
-            <ListItemText primary='Configuración' sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
+        ))}
         </List>
         <Divider />
       </Drawer>
+      <DrawerHeader />
+        {children}
     </Box>
     
-  );
+  )
 }
+
+
+export default MiniDrawer;

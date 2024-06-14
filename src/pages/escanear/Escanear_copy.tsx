@@ -167,7 +167,7 @@ const Escanear = () => {
 
     return (
         <Container component="main">
-            <MiniDrawer />
+            {/*<MiniDrawer />*/}
             <Box sx={{ margin: "auto", textAlign: "center" }}>
                 <div className="config-container">
                     <h3>{startScan ? "Desactivar camara" : "Activar camara"}</h3> <br />

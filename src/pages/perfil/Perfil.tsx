@@ -16,7 +16,7 @@ const Perfil = () => {
     if (!isAuthenticated) {
         return  (
             <div className="perfil-container">
-                <MiniDrawer />
+                {/*<MiniDrawer />*/}
                 <h2>Perfil del Estudiante</h2>
                 <div className="perfil-content">
                     <div className="perfil-image">

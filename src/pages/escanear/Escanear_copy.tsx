@@ -107,30 +107,20 @@ const Escanear = () => {
                 const response_asistencia = await axios.put(URL+"/asistencia/profesor",payload);
                 setGetLocation(false);
     
-                const nombreQR = response_asistencia.data.nombre_alumno;
                 
-                const alumnoEncontrado = alumnos.find((alumno: { nombre: string }) => alumno.nombre === nombreQR);
-    
-                if (alumnoEncontrado) {
+                console.log(response_asistencia)
+                if(response_asistencia.status == 200){
                     Swal.fire({
                         icon: 'success',
                         title: 'Registro exitoso',
-                        text: 'El alumno ha sido registrado exitosamente.',
-                    });
-                    navigate('/DataGrid', { state: { qrData_: response_asistencia.data } }); // Redirige a la ruta '/DataGrid' con los datos del QR
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Alumno no encontrado',
-                        text: 'El alumno no está registrado en el sistema.',
+                        text: 'Todo perfecto',
                     });
                 }
             } catch (err) {
-                console.error('Error parsing QR data:', err);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Hubo un problema al procesar el código QR.',
+                    text: err.response.data.detail,
                 });
             }
         }

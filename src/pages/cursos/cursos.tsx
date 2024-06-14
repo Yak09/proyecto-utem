@@ -45,7 +45,7 @@ const Cursos = () => {
 
   return (
     <div className="cursos-container">
-      <MiniDrawer />
+      {/* <MiniDrawer /> */}
       <AppBar position="static" sx={{ backgroundColor: '#35BBAE' }}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#ffffff' }}>

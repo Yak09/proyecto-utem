@@ -29,22 +29,27 @@ function App() {
 
   return (
     <Router>
-      <MiniDrawer>
+      {isAuthenticated ? (
+        <MiniDrawer>
+          <Routes>
+            <Route path="/" element={<Navigate to="/Home" />} />
+            <Route path="/Home" element={<Home />} />
+            <Route path="/DataGrid" element={<DataGrid />} />
+            <Route path="/Perfil" element={<Perfil />} />
+            <Route path="/Generar" element={<Generar />} />
+            <Route path="/Escanear" element={<Escanear_copy />} />
+            <Route path="/CreatePin" element={<CreatePin />} />
+            <Route path="/Config" element={<Config />} />
+            <Route path="/cursos" element={<Cursos />} />
+            <Route path="/asistencia/:cursoId" element={<DataGridWithAssistance />} />
+          </Routes>
+        </MiniDrawer>
+      ) : (
         <Routes>
-          <Route path="/" element={<Navigate to="/Home" />} />
           <Route path="/login" element={<Login />} />
-          {/* Resto de las rutas */}
-          <Route path="/Home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
-          <Route path="/DataGrid" element={isAuthenticated ? <DataGrid /> : <Navigate to="/login" />} />
-          <Route path="/Perfil" element={isAuthenticated ? <Perfil /> : <Navigate to="/login" />} />
-          <Route path="/Generar" element={isAuthenticated ? <Generar /> : <Navigate to="/login" />} />
-          <Route path="/Escanear" element={isAuthenticated ? <Escanear_copy /> : <Navigate to="/login" />} />
-          <Route path="/CreatePin" element={isAuthenticated ? <CreatePin /> : <Navigate to="/login" />} />
-          <Route path="/Config" element={isAuthenticated ? <Config /> : <Navigate to="/login" />} />
-          <Route path="/cursos" element={isAuthenticated ? <Cursos /> : <Navigate to="/login" />} />
-          <Route path="/asistencia/:cursoId" element={isAuthenticated ? <DataGridWithAssistance /> : <Navigate to="/login" />} /> {/* Ruta para mostrar el DataGrid de asistencia */}
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
-      </MiniDrawer>
+      )}
     </Router>
   );
 }

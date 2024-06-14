@@ -15,23 +15,19 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-
 import HomeIcon from '@mui/icons-material/Home';
 import Person2Icon from '@mui/icons-material/Person2';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import BuildIcon from '@mui/icons-material/Build';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import LoginButton from './loginButton.tsx';
 import LogoutButton from './logout.tsx';
 import Profile from './profile.tsx';
 import { useAuth0 } from '@auth0/auth0-react';
 import logo from '../assets/logo_black_utem.png'; // Ajusta la ruta según tu estructura de carpetas
-
-import Example from './Carousel.tsx'
-
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
-
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -59,7 +55,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -106,14 +101,20 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth0();
+  const namespace = 'https://your-namespace.com/';
+  const roles = user ? (user[namespace + 'roles'] || []) : [];
 
   const menuItems = [
     { text: 'Home', icon: <HomeIcon />, path: '/Home' },
     { text: 'Perfil', icon: <Person2Icon />, path: '/Perfil' },
+    { text: 'Libro de clases', icon: <MenuBookIcon />, path: '/cursos', role: 'Profesor' },
     { text: 'Generar QR', icon: <QrCodeIcon />, path: '/Generar' },
     { text: 'Escanear QR', icon: <QrCodeIcon />, path: '/Escanear' },
     { text: 'Configuración', icon: <BuildIcon />, path: '/Config' },
   ];
+
+  const filteredMenuItems = menuItems.filter(item => !item.role || roles.includes(item.role));
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -123,8 +124,7 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     setOpen(false);
   };
 
-  const {isAuthenticated} =useAuth0()
-  
+  const { isAuthenticated } = useAuth0();
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -140,13 +140,13 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               marginRight: 5,
               ...(open && { display: 'none' }),
             }}
-          > 
-          <MenuIcon/>
+          >
+            <MenuIcon />
           </IconButton>
           <img src={logo} alt="logo" style={{ width: 250, marginRight: 64 }} />
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '16px', paddingRight: '30px' }}>
             <Profile />
-            { isAuthenticated ? <LogoutButton />:<LoginButton /> }
+            {isAuthenticated ? <LogoutButton /> : <LoginButton />}
           </div>
         </Toolbar>
       </AppBar>
@@ -158,37 +158,35 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </DrawerHeader>
         <Divider />
         <List>
-        {menuItems.map((item, index) => (
-                  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => navigate(item.path)} key={index}>
+          {filteredMenuItems.map((item, index) => (
+            <ListItem disablePadding sx={{ display: 'block' }} onClick={() => navigate(item.path)} key={index}>
               <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-              >
-              <ListItemIcon
                 sx={{
-                minWidth: 0,
-                mr: open ? 3 : 'auto',
-                justifyContent: 'center',
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
                 }}
               >
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
-        ))}
+          ))}
         </List>
         <Divider />
       </Drawer>
       <DrawerHeader />
-        {children}
+      {children}
     </Box>
-    
-  )
-}
-
+  );
+};
 
 export default MiniDrawer;

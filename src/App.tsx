@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import './App.scss';
@@ -13,15 +14,14 @@ import DataGridWithAssistance from './pages/cursos/DataGridWithAssistance';
 import { useAuth0 } from "@auth0/auth0-react";
 import Login from './pages/login/login';
 import MiniDrawer from './components/drawer';
+import AccessDenied from './pages/accesoDenegado/AccesoDenegado'; // Crea esta página para mostrar un mensaje de acceso denegado
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const { user, isAuthenticated, isLoading } = useAuth0();
 
   const namespace = 'https://your-namespace.com/'; // Asegúrate de que coincide con el namespace en la regla
   const roles = user ? (user[namespace + 'roles'] || []) : [];
-  const idRole = roles.length > 1 ? roles[1] : 'sin id rol';
-
-  const URL = import.meta.env.VITE_API_URL;
 
   if (isLoading) {
     return <div>Loading ...</div>;
@@ -40,8 +40,9 @@ function App() {
             <Route path="/Escanear" element={<Escanear_copy />} />
             <Route path="/CreatePin" element={<CreatePin />} />
             <Route path="/Config" element={<Config />} />
-            <Route path="/cursos" element={<Cursos />} />
-            <Route path="/asistencia/:cursoId" element={<DataGridWithAssistance />} />
+            <Route path="/cursos" element={<ProtectedRoute component={Cursos} allowedRoles={['Profesor']} />} />
+            <Route path="/asistencia/:cursoId" element={<ProtectedRoute component={DataGridWithAssistance} allowedRoles={['Profesor']} />} />
+            <Route path="/access-denied" element={<AccessDenied />} />
           </Routes>
         </MiniDrawer>
       ) : (

@@ -154,9 +154,10 @@ const Generar = () => {
   };
 
   const handleDownloadClick = async () => {
-    if (qrRef.current) {
+    if (qrRef.current && asignaturaSeleccionada && horarioSeleccionado) {
       const dataUrl = await toPng(qrRef.current);
-      download(dataUrl, 'qr-code.png');
+      const fileName = `${asignaturaSeleccionada.label}_${fecha}_${horarioSeleccionado.label.replace(/:/g, '-')}.png`;
+      download(dataUrl, fileName);
     }
   };
 
@@ -208,7 +209,7 @@ const Generar = () => {
       )}
       <div className="generar-button" style={{ marginTop: '20px' }}>
         <Button variant="contained" onClick={handleGenerarClick}>
-          Generar
+          Iniciar clase
         </Button>
       </div>
       <div className="generar-qrcode" style={{ marginTop: '20px' }}>

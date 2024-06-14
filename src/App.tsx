@@ -20,19 +20,26 @@ import ProtectedRoute from './components/ProtectedRoute';
 function App() {
   const { user, isAuthenticated, isLoading } = useAuth0();
 
-  const namespace = 'https://your-namespace.com/'; // Asegúrate de que coincide con el namespace en la regla
+  const namespace = 'https://your-namespace.com/';
   const roles = user ? (user[namespace + 'roles'] || []) : [];
-
+  
   if (isLoading) {
     return <div>Loading ...</div>;
   }
+
+  const getDefaultPath = () => {
+    if (roles.includes('Profesor')) {
+      return '/cursos';
+    }
+    return '/Home';
+  };
 
   return (
     <Router>
       {isAuthenticated ? (
         <MiniDrawer>
           <Routes>
-            <Route path="/" element={<Navigate to="/Home" />} />
+            <Route path="/" element={<Navigate to={getDefaultPath()} />} />
             <Route path="/Home" element={<Home />} />
             <Route path="/DataGrid" element={<DataGrid />} />
             <Route path="/Perfil" element={<Perfil />} />

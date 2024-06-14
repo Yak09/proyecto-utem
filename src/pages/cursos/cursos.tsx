@@ -1,19 +1,16 @@
 import { useEffect, useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import { useNavigate } from 'react-router-dom'; 
+import { AppBar, Toolbar, Typography, Grid, Card, CardContent, CardActionArea, IconButton, Box } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import MiniDrawer from '../../components/drawer';
 import axios from 'axios';
-import './Cursos.scss'; // asegúrate de crear este archivo para los estilos
+import './Cursos.scss';
 
-import { profesorContext } from '../../hooks/profesorContext';
+
 import { useAuth0 } from "@auth0/auth0-react";
-import { Alumno } from '../../interfaces/interfaces';
 
 const Cursos = () => {
-  const data = useContext(profesorContext);
+
   const URL = import.meta.env.VITE_API_URL;
   const [cursos, setCursos] = useState([]);
   
@@ -30,23 +27,17 @@ const Cursos = () => {
   useEffect(() => {
     const fetchCursos = async () => {
       try {
-        if (roles[0] === "Profesor") {
-          const response = await axios.get(`${URL}/cursos/profesor`, {
-            params: { _id: roles[1] }
-          });
-          setCursos(response.data);
-        } else {
-          const response = await axios.get(`${URL}/asignaturas/alumno`, {
-            params: { _id: roles[1] }
-          });
-          setCursos(response.data[0].cursos_info);
-        }
+        const endpoint = roles[0] === "Profesor" ? '/cursos/profesor' : '/asignaturas/alumno';
+        const params = { _id: roles[1] };
+        const response = await axios.get(`${URL}${endpoint}`, { params });
+        const cursosData = roles[0] === "Profesor" ? response.data : response.data[0].cursos_info;
+        setCursos(cursosData);
       } catch (error) {
         console.error('Error fetching cursos:', error);
       }
     };
     fetchCursos();
-  }, [data, roles, URL]);
+  }, [roles, URL]);
 
   const handleCursoClick = (cursoId) => {
     navigate(`/asistencia/${cursoId}`);
@@ -55,16 +46,34 @@ const Cursos = () => {
   return (
     <div className="cursos-container">
       <MiniDrawer />
-      <div className="cursos-content">
-        <h2>Cursos</h2>
-        <div className="cursos-list">
+      <AppBar position="static" sx={{ backgroundColor: '#35BBAE' }}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#ffffff' }}>
+            Cursos {roles[0]}
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Box sx={{ padding: 2 }}>
+        <Grid container spacing={2}>
           {cursos.map((curso, index) => (
-            <div key={index} className="curso-item" onClick={() => handleCursoClick(curso._id)}>
-              <a href="#">{curso.nombre}</a>
-            </div>
+            <Grid item xs={6} sm={6} md={6} key={index}>
+              <Card sx={{ backgroundColor: '#eeeeee', boxShadow: 3 }}>
+                <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' , padding:'5px' }}>
+                  <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#123456' }}>
+                    {curso.nombre}
+                  </Typography>
+                  <IconButton aria-label="search" onClick={() => handleCursoClick(curso._id)} sx={{ color: '#123456' }}>
+                    <SearchIcon />
+                  </IconButton>
+                </CardContent>
+                <CardActionArea onClick={() => handleCursoClick(curso._id)}>
+                  <Box sx={{ height: '100%', width: '100%' }}></Box> {/* Invisible overlay for clicking */}
+                </CardActionArea>
+              </Card>
+            </Grid>
           ))}
-        </div>
-      </div>
+        </Grid>
+      </Box>
     </div>
   );
 };

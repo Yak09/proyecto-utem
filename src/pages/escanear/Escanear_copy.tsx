@@ -108,12 +108,12 @@ const Escanear = () => {
                 setGetLocation(false);
     
                 
-                console.log(response_asistencia)
                 if(response_asistencia.status == 200){
+                    console.log(response_asistencia);
                     Swal.fire({
                         icon: 'success',
                         title: 'Registro exitoso',
-                        text: 'Todo perfecto',
+                        text: response_asistencia.data.res,
                     });
                 }
             } catch (err) {

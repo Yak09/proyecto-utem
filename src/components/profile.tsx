@@ -24,7 +24,7 @@ const Profile = () => {
           <span style={{ fontSize: '14px', color: 'gray' }}>{user.email}</span>
         </div>
         <img src={user.picture} alt={user.name} style={{ borderRadius: '50%', width: '50px', height: '50px' }} />
-        <div>
+        {/*<div>
           {roles.length > 0 && (
             <div>
               <strong>Roles:</strong>
@@ -32,13 +32,13 @@ const Profile = () => {
                 {roles.map((role, index) => (
                   <li key={index} style={{ fontSize: '14px', color: 'blue' }}>{role}</li>
                 ))}
-              </ul> */}
+              </ul>
               <div style={{ marginTop: '10px' }}>
                 <strong>id:</strong> <span style={{ fontSize: '14px', color: 'blue' }}>{id_rol}</span>
               </div>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     )
   );

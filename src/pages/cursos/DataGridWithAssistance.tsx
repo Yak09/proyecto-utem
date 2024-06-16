@@ -120,7 +120,6 @@ export default function DataGridWithAssistance() {
 
   return (
     <Box sx={{ height: 700, width: '100%' }}>
-      <MiniDrawer />
       <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
           <Typography variant="h3" gutterBottom>
             {curso}

@@ -53,13 +53,13 @@ const Cursos = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Box sx={{ padding: 2 }}>
+      <Box sx={{ padding: 2}}>
         <Grid container spacing={2}>
           {cursos.map((curso, index) => (
             <Grid item xs={6} sm={6} md={6} key={index}>
               <Card sx={{ backgroundColor: '#eeeeee', boxShadow: 3 }}>
                 <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' , padding:'5px' }}>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#123456' }}>
+                  <Typography variant="h8" component="div" sx={{ flexGrow: 1, color: '#123456' }}>
                     {curso.nombre}
                   </Typography>
                   <IconButton aria-label="search" onClick={() => handleCursoClick(curso._id)} sx={{ color: '#123456' }}>

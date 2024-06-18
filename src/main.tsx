@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import GlobalStyles from '@mui/material/GlobalStyles';
+import CssBaseline from '@mui/material/CssBaseline';
 import { Auth0Provider } from '@auth0/auth0-react';
 import App from './App.tsx';
 import './index.css';
@@ -12,6 +14,9 @@ const theme = createTheme({
     },
     secondary: {
       main: '#031A8E',
+    },
+    background: {
+      default: '#f5f5f5', // Color de fondo de la aplicación
     },
   },
 });
@@ -33,6 +38,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       }}
     >
       <ThemeProvider theme={theme}>
+      <CssBaseline />
+        <GlobalStyles
+          styles={{
+            body: { backgroundColor: theme.palette.background.default },
+            html: { backgroundColor: theme.palette.background.default },
+          }}
+        />
         <App />
       </ThemeProvider>
     </Auth0Provider>

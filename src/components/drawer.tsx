@@ -152,39 +152,39 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </Toolbar>
       </AppBar>
       <nav>
-      <DrawerHeader>
-        <Drawer variant="permanent" open={open}>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          <Divider />
-          <List>
-            {filteredMenuItems.map((item, index) => (
-              <ListItem disablePadding sx={{ display: 'block' }} onClick={() => navigate(item.path)} key={index}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
+        <DrawerHeader>
+          <Drawer variant="permanent" open={open}>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              </IconButton>
+            <Divider />
+            <List>
+              {filteredMenuItems.map((item, index) => (
+                <ListItem disablePadding sx={{ display: 'block', mt: 2 }} onClick={() => navigate(item.path)} key={index}>
+                  <ListItemButton
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
+                      minHeight: 48,
+                      justifyContent: open ? 'initial' : 'center',
+                      px: 2.5,
                     }}
                   >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-        </Drawer>
-        </DrawerHeader>
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : 'auto',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+            <Divider />
+          </Drawer>
+          </DrawerHeader>
       </nav>
       <Box component="main" sx={{p: 1, height: 750, width: '100%'}}>
         {children}

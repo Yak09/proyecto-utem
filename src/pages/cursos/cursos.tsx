@@ -93,14 +93,14 @@ const Cursos = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{backgroundColor:'#FFFFFF'}}>
         <Grid item xs={12} md={3}>
           {cursos.map((curso) => (
             <Card
             key={curso._id}
             sx={{
               mb: 2,
-              backgroundColor: cursoSeleccionado?._id === curso._id ? 'white' : '#e0f7fa',
+              backgroundColor: cursoSeleccionado?._id === curso._id ? 'white' : '#e8f3ff',
               border: '1px solid #0277bd',
               position: 'relative',
               overflow: 'hidden',
@@ -173,7 +173,7 @@ const Cursos = () => {
                   </Select>
                 </FormControl>
               </Box>
-              <Box sx={{ height: 800, width: '100%' }}>
+              <Box sx={{ height: 650, width: '100%' }}>
                 <DataGrid
                   rows={rows}
                   columns={columns}

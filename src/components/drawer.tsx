@@ -111,8 +111,7 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     { text: 'Perfil', icon: <Person2Icon />, path: '/Perfil' },
     { text: 'Libro de clases', icon: <MenuBookIcon />, path: '/cursos', role: 'Profesor' },
     { text: 'Generar QR', icon: <QrCodeIcon />, path: '/Generar' },
-    { text: 'Escanear QR', icon: <CameraAltIcon />, path: '/Escanear' },
-    { text: 'Configuración', icon: <BuildIcon />, path: '/Config' },
+    { text: 'Escanear QR', icon: <CameraAltIcon />, path: '/Escanear' }
   ];
 
   const filteredMenuItems = menuItems.filter(item => !item.role || roles.includes(item.role));
@@ -130,8 +129,8 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="absolute" open={open} color="default" component="nav">
-        <Toolbar disableGutters>
+      <AppBar position="fixed" open={open} color="default" component="nav">
+        <Toolbar variant="dense" disableGutters>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -186,7 +185,7 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </Drawer>
           </DrawerHeader>
       </nav>
-      <Box component="main" sx={{p: 1, height: 750, width: '100%'}}>
+      <Box component="main" sx={{p: 1, width: '100%'}}>
         {children}
       </Box>
     </Box>

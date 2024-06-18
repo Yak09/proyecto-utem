@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import QrCodeIcon from '@mui/icons-material/QrCode';
-import '../config/config.scss';
+import './config.scss';
 
 
 

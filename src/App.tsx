@@ -44,8 +44,6 @@ function App() {
             <Route path="/Perfil" element={<Perfil />} />
             <Route path="/Generar" element={<Generar />} />
             <Route path="/Escanear" element={<Escanear_copy />} />
-            <Route path="/CreatePin" element={<CreatePin />} />
-            <Route path="/Config" element={<Config />} />
             <Route path="/cursos" element={<ProtectedRoute component={Cursos} allowedRoles={['Profesor']} />} />
             <Route path="/asistencia/:cursoId" element={<ProtectedRoute component={DataGridWithAssistance} allowedRoles={['Profesor']} />} />
             <Route path="/access-denied" element={<AccessDenied />} />

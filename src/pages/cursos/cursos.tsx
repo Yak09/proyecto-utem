@@ -1,80 +1,165 @@
-import { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import { AppBar, Toolbar, Typography, Grid, Card, CardContent, CardActionArea, IconButton, Box } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import MiniDrawer from '../../components/drawer';
+import React, { useState, useEffect } from 'react';
+import { Grid, Box, Typography, Button, Card, CardContent, TextField, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import axios from 'axios';
-import './Cursos.scss';
-
-
 import { useAuth0 } from "@auth0/auth0-react";
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from 'react-router-dom';
 
 const Cursos = () => {
-
   const URL = import.meta.env.VITE_API_URL;
   const [cursos, setCursos] = useState([]);
-  
-  const { user, isLoading } = useAuth0();
+  const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedPeriodo, setSelectedPeriodo] = useState(1);
+  const { user } = useAuth0();
   const namespace = 'https://your-namespace.com/';
   const roles = user[namespace + 'roles'] || [];
-  
   const navigate = useNavigate();
 
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  }
-  
   useEffect(() => {
     const fetchCursos = async () => {
-      try {
-        const endpoint = roles[0] === "Profesor" ? '/cursos/profesor' : '/asignaturas/alumno';
-        const params = { _id: roles[1] };
-        const response = await axios.get(`${URL}${endpoint}`, { params });
-        const cursosData = roles[0] === "Profesor" ? response.data : response.data[0].cursos_info;
-        setCursos(cursosData);
-      } catch (error) {
-        console.error('Error fetching cursos:', error);
+      const endpoint = roles[0] === "Profesor" ? '/cursos/profesor' : '/asignaturas/alumno';
+      const params = { _id: roles[1] };
+      const response = await axios.get(`${URL}${endpoint}`, { params });
+      const cursosData = roles[0] === "Profesor" ? response.data : response.data[0].cursos_info;
+      setCursos(cursosData);
+      if (cursosData.length > 0) {
+        handleCursoClick(cursosData[0]);
       }
     };
     fetchCursos();
-  }, [roles, URL]);
+  }, [URL, roles]);
 
-  const handleCursoClick = (cursoId) => {
-    navigate(`/asistencia/${cursoId}`);
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'ID', width: 90 },
+    { field: 'nombre', headerName: 'Nombre', width: 200 },
+    { field: 'carrera', headerName: 'Carrera', width: 200 },
+    { field: 'correo', headerName: 'Correo', width: 250 },
+    { field: 'presente', headerName: 'Presente', width: 110, renderCell: (params) => (params.value ? <CheckIcon color="success" /> : <CloseIcon color="error" />) },
+  ];
+
+  const fetchData = async (cursoId, fecha, periodo) => {
+    try {
+      const response = await axios.get(`${URL}/asistencia/clase`, {
+        params: {
+          curso_id: cursoId,
+          fecha: fecha,
+          periodo: periodo
+        }
+      });
+      const data = response.data.res.map((item, index) => ({
+        id: index + 1,
+        nombre: item.alumno,
+        carrera: item.carrera || 'N/A',
+        correo: item.correo || 'N/A',
+        presente: item.asistencia,
+      }));
+      setRows(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const handleCursoClick = (curso) => {
+    setCursoSeleccionado(curso);
+    fetchData(curso._id, selectedDate, selectedPeriodo);
+  };
+
+  const handleDateChange = (event) => {
+    const newDate = event.target.value;
+    setSelectedDate(newDate);
+    if (cursoSeleccionado) {
+      fetchData(cursoSeleccionado._id, newDate, selectedPeriodo);
+    }
+  };
+
+  const handlePeriodoChange = (event) => {
+    const newPeriodo = event.target.value;
+    setSelectedPeriodo(newPeriodo);
+    if (cursoSeleccionado) {
+      fetchData(cursoSeleccionado._id, selectedDate, newPeriodo);
+    }
+  };
+
+  const handleBackGenerar = () => {
+    if (cursoSeleccionado) {
+      navigate(`/Generar/`, { state: { selectedDate, selectedPeriodo, cursoId: cursoSeleccionado._id } });
+    }
   };
 
   return (
-    <div className="cursos-container">
-      {/* <MiniDrawer /> */}
-      <AppBar position="static" sx={{ backgroundColor: '#35BBAE' }}>
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#ffffff' }}>
-            Cursos {roles[0]}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box sx={{ padding: 2}}>
-        <Grid container spacing={2}>
-          {cursos.map((curso, index) => (
-            <Grid item xs={6} sm={6} md={6} key={index}>
-              <Card sx={{ backgroundColor: '#eeeeee', boxShadow: 3 }}>
-                <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' , padding:'5px' }}>
-                  <Typography variant="h8" component="div" sx={{ flexGrow: 1, color: '#123456' }}>
-                    {curso.nombre}
-                  </Typography>
-                  <IconButton aria-label="search" onClick={() => handleCursoClick(curso._id)} sx={{ color: '#123456' }}>
-                    <SearchIcon />
-                  </IconButton>
-                </CardContent>
-                <CardActionArea onClick={() => handleCursoClick(curso._id)}>
-                  <Box sx={{ height: '100%', width: '100%' }}></Box> {/* Invisible overlay for clicking */}
-                </CardActionArea>
-              </Card>
-            </Grid>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
+          {cursos.map((curso) => (
+            <Card key={curso._id} sx={{ mb: 2 }} onClick={() => handleCursoClick(curso)}>
+              <CardContent>
+                <Typography variant="h6">{curso.nombre}</Typography>
+              </CardContent>
+            </Card>
           ))}
         </Grid>
-      </Box>
-    </div>
+        <Grid item xs={12} md={8}>
+          {cursoSeleccionado && (
+            <>
+              <Typography variant="h4" gutterBottom>
+                Asistencia para {cursoSeleccionado.nombre}
+              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
+                <TextField
+                  id="date"
+                  label="Seleccionar Fecha"
+                  type="date"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  sx={{ m: 1 }}
+                />
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id="periodo-label">Periodo</InputLabel>
+                  <Select
+                    labelId="periodo-label"
+                    id="periodo-select"
+                    value={selectedPeriodo}
+                    label="Periodo"
+                    onChange={handlePeriodoChange}
+                  >
+                    <MenuItem value={1}>08:00 - 09:30</MenuItem>
+                    <MenuItem value={2}>09:40 - 11:10</MenuItem>
+                    <MenuItem value={3}>11:20 - 12:50</MenuItem>
+                    <MenuItem value={4}>13:00 - 14:30</MenuItem>
+                    <MenuItem value={5}>14:40 - 16:10</MenuItem>
+                    <MenuItem value={6}>16:20 - 17:50</MenuItem>
+                    <MenuItem value={7}>18:00 - 19:30</MenuItem>
+                    <MenuItem value={8}>19:40 - 21:10</MenuItem>
+                    <MenuItem value={9}>21:20 - 22:50</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box sx={{ height: 800, width: '100%' }}>
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  pageSize={10}
+                  checkboxSelection
+                  disableSelectionOnClick
+                />
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2, padding: '20px' }}>
+                <Button variant="contained" color="secondary" onClick={handleBackGenerar}>
+                  Generar QR
+                </Button>
+              </Box>
+            </>
+          )}
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

@@ -167,7 +167,7 @@ const Escanear = () => {
                     </Button>
                     <Button
                         variant="contained"
-                        color="primary"
+                        color="secondary"
                         style={{
                             width: '200px', // Personaliza el ancho del botón
                             height: '50px', // Personaliza la altura del botón

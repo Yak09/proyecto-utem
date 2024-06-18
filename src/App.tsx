@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import './App.scss';
@@ -8,7 +7,6 @@ import Generar from './pages/generar/Generar';
 import Escanear_copy from './pages/escanear/Escanear_copy';
 import CreatePin from './pages/config/CreatePin';
 import Config from './pages/config/Config';
-import DataGrid from './pages/home/dataGrid';
 import Cursos from './pages/cursos/cursos';
 import DataGridWithAssistance from './pages/cursos/DataGridWithAssistance';
 import { useAuth0 } from "@auth0/auth0-react";
@@ -41,7 +39,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to={getDefaultPath()} />} />
             <Route path="/Home" element={<Home />} />
-            <Route path="/DataGrid" element={<DataGrid />} />
             <Route path="/Perfil" element={<Perfil />} />
             <Route path="/Generar" element={<Generar />} />
             <Route path="/Escanear" element={<Escanear_copy />} />

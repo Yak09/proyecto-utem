@@ -3,8 +3,7 @@ import Button from '@mui/material/Button';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import '../config/config.scss';
 
-import Example from '../../components/Carousel.tsx'
-import MiniDrawer from '../../components/drawer.tsx'
+
 
 const CreatePin = () => {
 

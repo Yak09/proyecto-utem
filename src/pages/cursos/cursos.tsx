@@ -92,16 +92,17 @@ const Cursos = () => {
 
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} sx={{backgroundColor:'#FFFFFF'}}>
-        <Grid item xs={12} md={3}>
+    <Box sx={{ flexGrow: 1, boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.3)' }}>
+      <Grid container spacing={2} sx={{backgroundColor:'#FFFFFF',borderRadius: 2}}>
+        <Grid item xs={12} md={3} sx={{backgroundColor:'#e8f3ff'}} >
           {cursos.map((curso) => (
-            <Card
+            <Box
             key={curso._id}
             sx={{
-              mb: 2,
+              mb: 0,
               backgroundColor: cursoSeleccionado?._id === curso._id ? 'white' : '#e8f3ff',
-              border: '1px solid #0277bd',
+              borderRadius: '30px 0px 0px 30px',
+              borderBottom: '1px solid #0277bd',
               position: 'relative',
               overflow: 'hidden',
               cursor: 'pointer',
@@ -120,6 +121,7 @@ const Cursos = () => {
                 transform: 'scaleX(0)',
                 transformOrigin: 'right',
                 transition: 'transform 0.5s ease',
+                borderRadius: '30px 0px 0px 30px'
               },
               '& > *': {
                 position: 'relative',
@@ -131,7 +133,7 @@ const Cursos = () => {
               <CardContent>
                   <Typography variant="caption">{curso.nombre}</Typography>
               </CardContent>
-            </Card>
+            </Box>
           ))}
         </Grid>
         <Grid item xs={12} md={9}>

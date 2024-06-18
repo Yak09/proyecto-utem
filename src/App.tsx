@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
-import './App.scss';
 import Home from './pages/home/Home';
 import Perfil from './pages/perfil/Perfil';
 import Generar from './pages/generar/Generar';

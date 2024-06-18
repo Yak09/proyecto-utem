@@ -3,15 +3,13 @@ import Button from '@mui/material/Button';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import '../config/config.scss';
 
-import Example from '../../components/Carousel.tsx'
-import MiniDrawer from '../../components/drawer.tsx'
+
 
 const CreatePin = () => {
 
     return (
         <>  
             <div className="config-container">
-            {/*<MiniDrawer />*/}
                 <h3>Registro de Asistencia</h3> <br/>
                 {/* Utiliza Link para enlazar al botón con la ruta de Config */}
                 <Link to="../Generar">

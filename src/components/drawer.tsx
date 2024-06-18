@@ -130,7 +130,7 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} color="default" component="nav">
+      <AppBar position="absolute" open={open} color="default" component="nav">
         <Toolbar disableGutters>
           <IconButton
             color="inherit"
@@ -152,6 +152,7 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </Toolbar>
       </AppBar>
       <nav>
+      <DrawerHeader>
         <Drawer variant="permanent" open={open}>
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -183,8 +184,9 @@ const MiniDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </List>
           <Divider />
         </Drawer>
+        </DrawerHeader>
       </nav>
-      <Box component="main" sx={{p: 10}}>
+      <Box component="main" sx={{p: 1, height: 750, width: '100%'}}>
         {children}
       </Box>
     </Box>

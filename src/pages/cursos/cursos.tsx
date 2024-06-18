@@ -34,11 +34,11 @@ const Cursos = () => {
   }, [URL, roles]);
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'nombre', headerName: 'Nombre', width: 200 },
+    { field: 'id', headerName: 'ID', width: 45 },
+    { field: 'nombre', headerName: 'Nombre', width: 230 },
     { field: 'carrera', headerName: 'Carrera', width: 200 },
-    { field: 'correo', headerName: 'Correo', width: 250 },
-    { field: 'presente', headerName: 'Presente', width: 110, renderCell: (params) => (params.value ? <CheckIcon color="success" /> : <CloseIcon color="error" />) },
+    { field: 'correo', headerName: 'Correo', width: 170 },
+    { field: 'presente', headerName: 'Presente', width: 90, renderCell: (params) => (params.value ? <CheckIcon color="success" /> : <CloseIcon color="error" />) },
   ];
 
   const fetchData = async (cursoId, fecha, periodo) => {
@@ -90,24 +90,56 @@ const Cursos = () => {
     }
   };
 
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={3}>
           {cursos.map((curso) => (
-            <Card key={curso._id} sx={{ mb: 2 }} onClick={() => handleCursoClick(curso)}>
+            <Card
+            key={curso._id}
+            sx={{
+              mb: 2,
+              backgroundColor: cursoSeleccionado?._id === curso._id ? 'white' : '#e0f7fa',
+              border: '1px solid #0277bd',
+              position: 'relative',
+              overflow: 'hidden',
+              cursor: 'pointer',
+              '&:hover::before': {
+                transform: 'scaleX(1)',
+              },
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'white',
+                zIndex: 0,
+                transform: 'scaleX(0)',
+                transformOrigin: 'right',
+                transition: 'transform 0.5s ease',
+              },
+              '& > *': {
+                position: 'relative',
+                zIndex: 1,
+              },
+            }}
+            onClick={() => handleCursoClick(curso)}
+          >
               <CardContent>
-                <Typography variant="h6">{curso.nombre}</Typography>
+                  <Typography variant="caption">{curso.nombre}</Typography>
               </CardContent>
             </Card>
           ))}
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={9}>
           {cursoSeleccionado && (
             <>
-              <Typography variant="h4" gutterBottom>
+              {/*<Typography variant="h4" gutterBottom>
                 Asistencia para {cursoSeleccionado.nombre}
-              </Typography>
+              </Typography>*/}
               <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
                 <TextField
                   id="date"

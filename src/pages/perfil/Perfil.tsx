@@ -1,6 +1,5 @@
 import './perfil.scss';
 
-import MiniDrawer from '../../components/drawer.tsx';
 import { useContext } from 'react';
 import { AlumnoContext } from '../../hooks/alumnoContext.tsx';
 import { useAuth0 } from "@auth0/auth0-react";
@@ -47,7 +46,6 @@ const Perfil = () => {
 
     return (
         <div className="perfil-container">
-            <MiniDrawer />
             <h2>Perfil del Estudiante</h2>
             <div className="perfil-content">
                 <div className="perfil-image">

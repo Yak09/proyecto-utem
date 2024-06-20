@@ -57,7 +57,7 @@ const Generar = () => {
     const fetchAsignaturas = async () => {
       if (roles[0] === "Profesor") {
         try {
-          const response = await axios.get(URL + "/cursos/profesor", {
+          const response = await axios.get(URL + "/asignatura/cursos/profesor", {
             params: {
               _id: roles[1]
             }

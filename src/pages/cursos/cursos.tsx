@@ -21,7 +21,7 @@ const Cursos = () => {
 
   useEffect(() => {
     const fetchCursos = async () => {
-      const endpoint = roles[0] === "Profesor" ? '/cursos/profesor' : '/asignaturas/alumno';
+      const endpoint = roles[0] === "Profesor" ? '/asignatura/cursos/profesor' : '/asignaturas/alumno';
       const params = { _id: roles[1] };
       const response = await axios.get(`${URL}${endpoint}`, { params });
       const cursosData = roles[0] === "Profesor" ? response.data : response.data[0].cursos_info;
